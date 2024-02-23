@@ -21,10 +21,8 @@ const typeDefs = [
 
 const resolvers = {
   Query: {
-    placeSnapshot: async (obj, args, context, info) =>
-      getPlaceSnapshot(args.place_id, args.day, args.hour),
-    allPlaceSnapshots: async (obj, args, context, info) =>
-      allPlaceSnapshots(args.day, args.hour),
+    placeSnapshot: async (obj, args, context, info) => getPlaceSnapshot(args.place_id, args.day, args.hour),
+    allPlaceSnapshots: async (obj, args, context, info) => allPlaceSnapshots(args.day, args.hour),
   },
 };
 

@@ -1,7 +1,11 @@
 import express from "express";
-import { ApolloServer } from "apollo-server-express";
 import { createApplication } from "graphql-modules";
+import { applyMiddleware } from "graphql-middleware";
+import { ApolloServer } from "apollo-server-express";
+
 import { modules } from "./src/graphql";
+import { addUserToContext } from "./src/graphql/context";
+import { permissions } from "./src/graphql/permissions";
 
 const app = express();
 
@@ -10,7 +14,7 @@ async function startApolloServer() {
     modules: modules,
   });
   const schema = graphQLApplication.createSchemaForApollo();
-  const apolloServer = new ApolloServer({ schema });
+  const apolloServer = new ApolloServer({ schema: applyMiddleware(schema, permissions), context: addUserToContext });
 
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });

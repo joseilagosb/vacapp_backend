@@ -9,6 +9,7 @@ import { currentCrowd } from "./CurrentCrowd";
 import { currentQueue } from "./CurrentQueue";
 import { placeWorkingDay } from "./PlaceWorkingDay";
 import { crowdReport } from "./CrowdReport";
+import { user } from "./User";
 
 export const modules = [
   place,
@@ -22,4 +23,5 @@ export const modules = [
   currentCrowd,
   currentQueue,
   crowdReport,
+  user,
 ];

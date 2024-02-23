@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import model from "../models";
-import { getDayType, isWeekday } from "./time";
+import { getDayType } from "./time";
 const { CurrentCrowd } = model;
 
 const divideCrowds = (crowdsMap) => {
