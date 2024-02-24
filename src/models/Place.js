@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { Model, Op } from "sequelize";
 
 export default (sequelize, DataTypes) => {
   class Place extends Model {
@@ -39,5 +39,16 @@ export default (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+  Place.findByPlaceKeys = (associatedModel, placeKeys, associatedModelAttributes) => {
+    return associatedModel.findAll({
+      ...(associatedModelAttributes ? { attributes: associatedModelAttributes } : {}),
+      include: {
+        model: Place,
+        as: "places",
+        where: { id: { [Op.in]: placeKeys } },
+        attributes: ["id"],
+      },
+    });
+  };
   return Place;
 };

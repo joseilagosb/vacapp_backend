@@ -1,8 +1,9 @@
+import loaders from "./loaders";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const addUserToContext = ({ req }) => {
+const getCurrentUser = (req) => {
   const token = (req.get("Authorization") || "").replace("Bearer", "");
   try {
     if (token) {
@@ -12,4 +13,9 @@ export const addUserToContext = ({ req }) => {
   } catch {
     return {};
   }
+};
+
+export const addToContext = ({ req }) => {
+  const user = getCurrentUser(req);
+  return { ...user, ...loaders };
 };

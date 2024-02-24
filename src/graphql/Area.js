@@ -1,7 +1,7 @@
 import { createModule, gql } from "graphql-modules";
 import model from "../models";
 
-const { Area, Coordinate } = model;
+const { Area } = model;
 
 const typeDefs = [
   gql`
@@ -21,16 +21,7 @@ const resolvers = {
     allAreas: async (obj, args, context, info) => Area.findAll(),
   },
   Area: {
-    coordinates: async (obj, args, context, info) =>
-      Coordinate.findAll({
-        include: [
-          {
-            model: Area,
-            as: "areas",
-            where: { id: obj.id },
-          },
-        ],
-      }),
+    coordinates: async (obj, args, context, info) => await context.areaLoader.coordinates.load(obj.id),
   },
 };
 

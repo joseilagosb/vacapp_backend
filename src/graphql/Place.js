@@ -1,8 +1,7 @@
 import { createModule, gql } from "graphql-modules";
 import model from "../models";
-import db from "../models";
 
-const { Place, Coordinate, Service, PlaceType, Indicator, CurrentCrowd, CurrentQueue, PlaceWorkingDay } = model;
+const { Place } = model;
 
 const typeDefs = [
   gql`
@@ -34,63 +33,13 @@ const resolvers = {
     placeById: async (obj, args, context, info) => Place.findByPk(args.id),
   },
   Place: {
-    place_type: async (obj, args, context, info) => PlaceType.findByPk(obj.place_type),
-    coordinates: async (obj, args, context, info) =>
-      Coordinate.findAll({
-        include: [
-          {
-            model: Place,
-            as: "places",
-            where: { id: obj.id },
-          },
-        ],
-      }),
-    services: async (obj, args, context, info) =>
-      Service.findAll({
-        include: [
-          {
-            model: Place,
-            as: "places",
-            where: { id: obj.id },
-          },
-        ],
-      }),
-    indicators: async (obj, args, context, info) =>
-      Indicator.findAll({
-        attributes: [
-          "indicator_name",
-          "indicator_description",
-          "indicator_type",
-          [db.sequelize.col("places.PlaceIndicator.indicator_value"), "indicator_value"],
-          [db.sequelize.col("places.PlaceIndicator.opinion_no"), "opinion_no"],
-        ],
-        include: [
-          {
-            model: Place,
-            as: "places",
-            where: { id: obj.id },
-          },
-        ],
-        raw: true,
-      }),
-    place_working_days: async (obj, args, context, info) =>
-      PlaceWorkingDay.findAll({
-        where: {
-          place_id: obj.id,
-        },
-      }),
-    current_crowds: async (obj, args, context, info) =>
-      CurrentCrowd.findAll({
-        where: {
-          place_id: obj.id,
-        },
-      }),
-    current_queues: async (obj, args, context, info) =>
-      CurrentQueue.findAll({
-        where: {
-          place_id: obj.id,
-        },
-      }),
+    place_type: async (obj, args, context, info) => (await context.placeLoader.placeTypes.load(obj.place_type))[0],
+    coordinates: async (obj, args, context, info) => await context.placeLoader.coordinates.load(obj.id),
+    services: async (obj, args, context, info) => await context.placeLoader.services.load(obj.id),
+    indicators: async (obj, args, context, info) => await context.placeLoader.indicators.load(obj.id),
+    place_working_days: async (obj, args, context, info) => await context.placeLoader.placeWorkingDays.load(obj.id),
+    current_crowds: async (obj, args, context, info) => await context.placeLoader.currentCrowds.load(obj.id),
+    current_queues: async (obj, args, context, info) => await context.placeLoader.currentQueues.load(obj.id),
   },
 };
 
