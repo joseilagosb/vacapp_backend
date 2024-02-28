@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const getCurrentUser = (req) => {
-  const token = (req.get("Authorization") || "").replace("Bearer", "");
+  const token = (req.get("Authorization") || "").replace("Bearer ", "");
   try {
     if (token) {
       const user = jsonwebtoken.verify(token, process.env.JWT_SECRET);
