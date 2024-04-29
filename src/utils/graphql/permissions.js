@@ -1,6 +1,9 @@
 import { GraphQLError } from "graphql";
 import { rule, shield, allow, deny } from "graphql-shield";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const isAuthenticated = rule()((obj, args, context) => {
   return context.user !== undefined;
 });
@@ -13,7 +16,7 @@ export const permissions = shield(
     Mutation: {
       "*": isAuthenticated,
       login: allow,
-      signUp: deny,
+      signUp: process.env.NODE_ENV == "development" ? allow : deny,
     },
   },
   {

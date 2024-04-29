@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "type": "module",
   "scripts": {
     "dev": "npx nodemon --exec babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,10 +26,10 @@
     "graphql-shield": "^7.6.5",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.7.1",
-    "sequelize": "^6.7.0",
-    "sequelize-cli": "^6.2.0"
+    "sequelize": "^6.7.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "sequelize-cli": "^6.2.0"
   }
 }
