@@ -13,6 +13,12 @@ const typeDefs = [
       indicator_name: String
       indicator_type: Int
       indicator_description: String
+    }
+    type PlaceIndicator {
+      id: ID!
+      indicator_name: String
+      indicator_type: Int
+      indicator_description: String
       indicator_value: Float
       opinion_no: Int
     }

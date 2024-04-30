@@ -19,7 +19,7 @@ const typeDefs = [
       attention_surface: Int
       coordinates: [Coordinate]
       services: [Service]
-      indicators: [Indicator]
+      indicators: [PlaceIndicator]
       place_working_days: [PlaceWorkingDay]
       current_crowds: [CurrentCrowd]
       current_queues: [CurrentQueue]
@@ -33,13 +33,19 @@ const resolvers = {
     placeById: async (obj, args, context, info) => Place.findByPk(args.id),
   },
   Place: {
-    place_type: async (obj, args, context, info) => (await context.placeLoader.placeTypes.load(obj.place_type))[0],
-    coordinates: async (obj, args, context, info) => await context.placeLoader.coordinates.load(obj.id),
+    place_type: async (obj, args, context, info) =>
+      (await context.placeLoader.placeTypes.load(obj.place_type))[0],
+    coordinates: async (obj, args, context, info) =>
+      await context.placeLoader.coordinates.load(obj.id),
     services: async (obj, args, context, info) => await context.placeLoader.services.load(obj.id),
-    indicators: async (obj, args, context, info) => await context.placeLoader.indicators.load(obj.id),
-    place_working_days: async (obj, args, context, info) => await context.placeLoader.placeWorkingDays.load(obj.id),
-    current_crowds: async (obj, args, context, info) => await context.placeLoader.currentCrowds.load(obj.id),
-    current_queues: async (obj, args, context, info) => await context.placeLoader.currentQueues.load(obj.id),
+    indicators: async (obj, args, context, info) =>
+      await context.placeLoader.indicators.load(obj.id),
+    place_working_days: async (obj, args, context, info) =>
+      await context.placeLoader.placeWorkingDays.load(obj.id),
+    current_crowds: async (obj, args, context, info) =>
+      await context.placeLoader.currentCrowds.load(obj.id),
+    current_queues: async (obj, args, context, info) =>
+      await context.placeLoader.currentQueues.load(obj.id),
   },
 };
 
