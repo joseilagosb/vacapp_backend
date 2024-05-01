@@ -22,14 +22,17 @@ export default {
       );
     }),
     indicators: new DataLoader(async (keys) => {
-      const indicators = await Place.findByPlaceKeys(Indicator, keys, [
-        "indicator_name",
-        "indicator_description",
-        "indicator_type",
-        [model.sequelize.col("places.PlaceIndicator.indicator_value"), "indicator_value"],
-        [model.sequelize.col("places.PlaceIndicator.opinion_no"), "opinion_no"],
-      ]);
-      return keys.map((key) => indicators.filter((indicator) => indicator.id === key));
+      const indicators = await Place.findByPlaceKeys(Indicator, keys);
+      return keys.map((key) =>
+        indicators.map((indicator) => {
+          const place = indicator.places.find((place) => place.id === key);
+          return {
+            ...indicator.dataValues,
+            indicator_value: place.PlaceIndicator.indicator_value,
+            opinion_no: place.PlaceIndicator.opinion_no,
+          };
+        })
+      );
     }),
     placeWorkingDays: new DataLoader(async (keys) => {
       const placeWorkingDays = await PlaceWorkingDay.findAll();
