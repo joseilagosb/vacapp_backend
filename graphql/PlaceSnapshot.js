@@ -1,5 +1,6 @@
 import { createModule, gql } from "graphql-modules";
-import { allPlaceSnapshots, getPlaceSnapshot } from "../queries/place_snapshot";
+import { getPlaceSnapshot } from "../queries/place_snapshot";
+import { getAllPlaceSnapshots } from "../queries/all_place_snapshots";
 
 const typeDefs = [
   gql`
@@ -23,7 +24,8 @@ const resolvers = {
   Query: {
     placeSnapshot: async (obj, args, context, info) =>
       getPlaceSnapshot(args.place_id, args.day, args.hour),
-    allPlaceSnapshots: async (obj, args, context, info) => allPlaceSnapshots(args.day, args.hour),
+    allPlaceSnapshots: async (obj, args, context, info) =>
+      getAllPlaceSnapshots(args.day, args.hour),
   },
 };
 

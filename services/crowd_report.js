@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
-import model from "../models";
 import { getDayType } from "../utils/time";
-const { CurrentCrowd } = model;
+import { getAllPlaceCurrentCrowds } from "../queries/all_place_current_crowds";
 
 const divideCrowds = (crowdsMap) => {
   var result = {
@@ -217,13 +216,8 @@ const getLeastCrowdedDaySameTime = (crowdsMap, hour) => {
   return leastCrowdedDay;
 };
 
-export const getCrowdReport = async (place_id) => {
-  const crowdsList = await CurrentCrowd.findAll({
-    attributes: ["place_id", "crowd_day_of_week", "crowd_hour", "people_no"],
-    where: { place_id: place_id },
-    raw: true,
-  });
-
+export const getCrowdReport = async (placeId) => {
+  const crowdsList = await getAllPlaceCurrentCrowds(placeId);
   const crowdsMap = crowdsList.reduce((acc, crowd) => {
     acc[crowd["crowd_day_of_week"]] = acc[crowd["crowd_day_of_week"]] || {};
     acc[crowd["crowd_day_of_week"]][crowd["crowd_hour"]] = crowd["people_no"];

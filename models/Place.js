@@ -22,6 +22,14 @@ export default (sequelize, DataTypes) => {
         through: models.PlaceIndicator,
         foreignKey: "place_id",
       });
+      models.Place.hasMany(models.CurrentCrowd, {
+        as: "current_crowds",
+        foreignKey: "place_id",
+      });
+      models.Place.hasMany(models.CurrentQueue, {
+        as: "current_queues",
+        foreignKey: "place_id",
+      });
     }
   }
   Place.init(
