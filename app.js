@@ -1,5 +1,5 @@
 import express from "express";
-import { initApolloServer } from "./src/utils/graphql/init";
+import { initApolloServer } from "./graphql";
 
 const app = express();
 

@@ -1,8 +1,21 @@
 import DataLoader from "dataloader";
 
 import model from "../../models";
-const { PlaceType, Coordinate, PlaceWorkingDay, Place, Service, Indicator, CurrentCrowd, CurrentQueue, Area } = model;
+const {
+  PlaceType,
+  Coordinate,
+  PlaceWorkingDay,
+  Place,
+  Service,
+  Indicator,
+  CurrentCrowd,
+  CurrentQueue,
+  Area,
+} = model;
 
+// Funciones de utilidad para reducir el número de consultas a la base de datos (problema N + 1) y almacenar
+// en caché operaciones realizadas con anterioridad. Especialmente útil para consultas exigentes como allPlaces(), que
+// requiere la consulta de varias tablas relacionadas a Place.
 export default {
   placeLoader: {
     placeTypes: new DataLoader(async (keys) => {
@@ -36,15 +49,21 @@ export default {
     }),
     placeWorkingDays: new DataLoader(async (keys) => {
       const placeWorkingDays = await PlaceWorkingDay.findAll();
-      return keys.map((key) => placeWorkingDays.filter((placeWorkingDay) => placeWorkingDay.place_id === key));
+      return keys.map((key) =>
+        placeWorkingDays.filter((placeWorkingDay) => placeWorkingDay.place_id === key)
+      );
     }),
     currentCrowds: new DataLoader(async (keys) => {
       const currentCrowds = await CurrentCrowd.findAll();
-      return keys.map((key) => currentCrowds.filter((currentCrowd) => currentCrowd.place_id === key));
+      return keys.map((key) =>
+        currentCrowds.filter((currentCrowd) => currentCrowd.place_id === key)
+      );
     }),
     currentQueues: new DataLoader(async (keys) => {
       const currentQueues = await CurrentQueue.findAll();
-      return keys.map((key) => currentQueues.filter((currentQueue) => currentQueue.place_id === key));
+      return keys.map((key) =>
+        currentQueues.filter((currentQueue) => currentQueue.place_id === key)
+      );
     }),
   },
   areaLoader: {

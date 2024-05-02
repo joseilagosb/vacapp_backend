@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import model from "../models";
-import { getDayType } from "./time";
+import { getDayType } from "../utils/time";
 const { CurrentCrowd } = model;
 
 const divideCrowds = (crowdsMap) => {
@@ -81,7 +81,9 @@ const getAverageCrowdsObj = (dividedCrowds) => {
 
   for (let dayTypeKey in dividedCrowds) {
     for (let periodKey in dividedCrowds[dayTypeKey]) {
-      averageCrowds[dayTypeKey][periodKey] = getAverageCrowdsByHour(dividedCrowds[dayTypeKey][periodKey]);
+      averageCrowds[dayTypeKey][periodKey] = getAverageCrowdsByHour(
+        dividedCrowds[dayTypeKey][periodKey]
+      );
     }
   }
 
@@ -155,7 +157,9 @@ const getWeekCrowdReport = (averageCrowds) => {
       }
 
       const hoursKeys = Object.keys(currentCrowdObj);
-      const sortedHoursKeys = hoursKeys.sort((prev, curr) => currentCrowdObj[prev] - currentCrowdObj[curr]);
+      const sortedHoursKeys = hoursKeys.sort(
+        (prev, curr) => currentCrowdObj[prev] - currentCrowdObj[curr]
+      );
 
       weekCrowdReport[dayTypeIdx]["lowest_average_crowd"].push({
         time_period: periodKey,
@@ -169,7 +173,8 @@ const getWeekCrowdReport = (averageCrowds) => {
       });
 
       const crowdAverageInPeriod =
-        Object.values(currentCrowdObj).reduce((prev, curr) => prev + curr, 0) / Object.keys(currentCrowdObj).length;
+        Object.values(currentCrowdObj).reduce((prev, curr) => prev + curr, 0) /
+        Object.keys(currentCrowdObj).length;
       weekCrowdReport[dayTypeIdx]["average_people_no"].push({
         time_period: periodKey,
         people_no: Math.round(crowdAverageInPeriod),
@@ -215,9 +220,7 @@ const getLeastCrowdedDaySameTime = (crowdsMap, hour) => {
 export const getCrowdReport = async (place_id) => {
   const crowdsList = await CurrentCrowd.findAll({
     attributes: ["place_id", "crowd_day_of_week", "crowd_hour", "people_no"],
-    where: {
-      place_id: place_id,
-    },
+    where: { place_id: place_id },
     raw: true,
   });
 

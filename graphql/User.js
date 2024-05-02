@@ -1,6 +1,6 @@
 import { createModule, gql } from "graphql-modules";
 import model from "../models";
-import { signUpUser, loginUser } from "../utils/user";
+import { signUpUser, loginUser } from "../services/authentication";
 
 const { User } = model;
 

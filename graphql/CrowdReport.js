@@ -1,5 +1,5 @@
 import { createModule, gql } from "graphql-modules";
-import { getCrowdReport } from "../utils/crowd_report";
+import { getCrowdReport } from "../services/crowd_report";
 
 const typeDefs = [
   gql`

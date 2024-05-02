@@ -39,9 +39,12 @@ export default (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  Place.findByPlaceKeys = (associatedModel, placeKeys, associatedModelAttributes) => {
+
+  // Hace una "búsqueda invertida" del modelo asociado a Place
+  // En otras palabras, hace una consulta SQL al associatedModel haciendo una carga inmediata (Eager Loading)
+  // de los Place relacionados a cada fila resultante.
+  Place.findByPlaceKeys = (associatedModel, placeKeys) => {
     return associatedModel.findAll({
-      ...(associatedModelAttributes ? { attributes: associatedModelAttributes } : {}),
       include: {
         model: Place,
         as: "places",

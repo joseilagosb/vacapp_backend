@@ -39,3 +39,15 @@ export const loginUser = async (username, password) => {
 
 export const getToken = (id, username) =>
   jsonwebtoken.sign({ id, username }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+export const getCurrentUser = (req) => {
+  const token = (req.get("Authorization") || "").replace("Bearer ", "");
+  try {
+    if (token) {
+      const user = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+      return { user };
+    }
+  } catch {
+    return {};
+  }
+};
