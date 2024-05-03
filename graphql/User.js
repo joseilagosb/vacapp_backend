@@ -17,6 +17,7 @@ const typeDefs = [
     type AuthPayload {
       token: String!
       user: User!
+      message: String
     }
     type User {
       username: String

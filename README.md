@@ -14,6 +14,7 @@ It's the server side application of the VacApp project. It serves as the interfa
   - _graphql-shield_: GraphQL permissions framework for management of user authorization logic.
 - _jsonwebtoken_: Implementation of JSON Web Tokens for storage of authenticated user sessions.
 - _dataloader_: Utility to reduce database queries in the GraphQL API (see n + 1 problem).
+- _password-validator_: Utility to validate the password of new users with customizable rules.
 
 # Features
 

@@ -25,6 +25,7 @@
     "graphql-modules": "^2.1.2",
     "graphql-shield": "^7.6.5",
     "jsonwebtoken": "^9.0.2",
+    "password-validator": "^5.3.0",
     "pg": "^8.7.1",
     "sequelize": "^6.7.0"
   },
