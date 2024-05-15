@@ -1,7 +1,7 @@
-import express from "express";
+import express, { Express } from "express";
 import { initApolloServer } from "./graphql";
 
-const app = express();
+const app: Express = express();
 
 initApolloServer(app);
 
