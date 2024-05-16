@@ -1,5 +1,5 @@
 import { createModule, gql } from "graphql-modules";
-import model from "../models";
+import model from "../models/index.js";
 
 const { Coordinate } = model;
 
