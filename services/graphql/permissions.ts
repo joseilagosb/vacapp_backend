@@ -1,15 +1,14 @@
 import { GraphQLError } from "graphql";
 import { rule, shield, allow, deny } from "graphql-shield";
 
-import dotenv from "dotenv";
-dotenv.config();
+import { IMiddlewareGenerator } from "graphql-middleware";
 
 const isAuthenticated = rule()((obj, args, context) => {
   return context.user !== undefined;
 });
 
 // Por defecto, todas las rutas requieren autenticación salvo las de inicio de sesión y registro
-export const permissions = shield(
+export const permissions: IMiddlewareGenerator<any, any, any> = shield(
   {
     Query: {
       "*": isAuthenticated,

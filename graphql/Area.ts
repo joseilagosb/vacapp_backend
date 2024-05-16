@@ -19,7 +19,13 @@ const typeDefs: TypeDefs = [
 ];
 
 const resolvers: Resolvers = {
-  Query: { allAreas: async () => Area.findAll() },
+  // Query: { allAreas: async () => Area.findAll() },
+  Query: {
+    allAreas: async () => {
+      console.log(model);
+      return Area.findAll();
+    },
+  },
   Area: {
     coordinates: (obj, __, ___, ____) => Coordinate.findAll({ where: { id: obj.id } }),
     // coordinates: async (

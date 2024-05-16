@@ -4,6 +4,10 @@
     "module": "commonjs",
     "outDir": "./build",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true
   }
 } 

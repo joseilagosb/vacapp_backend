@@ -1,28 +1,32 @@
 import dotenv from "dotenv";
+import { DatabaseCredentialsByEnv } from "../ts/types/database.types";
 dotenv.config();
 
-module.exports = {
+const credentials: DatabaseCredentialsByEnv = {
   development: {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
     host: process.env.POSTGRES_HOST,
-    port: "5432",
+    port: 5432,
     dialect: "postgres",
-    // logging: false,
   },
   test: {
     username: "root",
-    password: null,
+    password: undefined,
     database: "database_test",
     host: "127.0.0.1",
+    port: 5432,
     dialect: "mysql",
   },
   production: {
     username: "root",
-    password: null,
+    password: undefined,
     database: "database_production",
     host: "127.0.0.1",
+    port: 5432,
     dialect: "mysql",
   },
 };
+
+export default credentials;
