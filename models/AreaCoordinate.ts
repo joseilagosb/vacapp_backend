@@ -1,6 +1,6 @@
 import { ForeignKey, InferAttributes, InferCreationAttributes, Model, DataTypes } from "sequelize";
 
-import sequelizeConnection from "../database/connection";
+import sequelize from "../database/connection";
 
 export class AreaCoordinate extends Model<
   InferAttributes<AreaCoordinate>,
@@ -16,7 +16,7 @@ export const areaCoordinateAttributes = {
 };
 
 export const areaCoordinateOptions = {
-  sequelize: sequelizeConnection,
+  sequelize,
   modelName: "AreaCoordinate",
   tableName: "area_coordinate",
   timestamps: false,

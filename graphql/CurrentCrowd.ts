@@ -1,6 +1,6 @@
-import { createModule, gql } from "graphql-modules";
+import { TypeDefs, createModule, gql } from "graphql-modules";
 
-const typeDefs = [
+const typeDefs: TypeDefs = [
   gql`
     type CurrentCrowd {
       id: ID!

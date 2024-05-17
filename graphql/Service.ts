@@ -1,9 +1,11 @@
-import { createModule, gql } from "graphql-modules";
-import model from "../models/index.js";
+import { TypeDefs, createModule, gql } from "graphql-modules";
 
+import model from "../models/index";
 const { Service } = model;
 
-const typeDefs = [
+import { Resolvers } from "../ts/types/graphql/resolvers.types.js";
+
+const typeDefs: TypeDefs = [
   gql`
     extend type Query {
       allServices: [Service]
@@ -16,9 +18,9 @@ const typeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    allServices: async (obj, args, context, info) => Service.findAll(),
+    allServices: async () => Service.findAll(),
   },
 };
 

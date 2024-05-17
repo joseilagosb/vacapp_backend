@@ -1,9 +1,9 @@
-import { createModule, gql } from "graphql-modules";
-import model from "../models/index.js";
+import { Resolvers, TypeDefs, createModule, gql } from "graphql-modules";
 
+import model from "../models";
 const { Indicator } = model;
 
-const typeDefs = [
+const typeDefs: TypeDefs = [
   gql`
     extend type Query {
       allIndicators: [Indicator]
@@ -25,9 +25,9 @@ const typeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    allIndicators: async (obj, args, context, info) => Indicator.findAll(),
+    allIndicators: async () => Indicator.findAll(),
   },
 };
 

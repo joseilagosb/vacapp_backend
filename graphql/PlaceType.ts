@@ -1,9 +1,11 @@
-import { createModule, gql } from "graphql-modules";
-import model from "../models/index.js";
+import { TypeDefs, createModule, gql } from "graphql-modules";
 
+import model from "../models/index";
+import { Resolvers } from "../ts/types/graphql/resolvers.types.js";
+import { PlaceType } from "../ts/types/graphql/typedefs.types";
 const { PlaceType } = model;
 
-const typeDefs = [
+const typeDefs: TypeDefs = [
   gql`
     extend type Query {
       allPlaceTypes: [PlaceType]
@@ -15,9 +17,9 @@ const typeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    allPlaceTypes: async (obj, args, context, info) => PlaceType.findAll(),
+    allPlaceTypes: async () => PlaceType.findAll(),
   },
 };
 

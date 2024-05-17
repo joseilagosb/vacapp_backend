@@ -1,6 +1,5 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, InitOptions, Model } from "sequelize";
-
-import sequelizeConnection from "../database/connection";
+import sequelize from "../database/connection";
 
 export class Coordinate extends Model<
   InferAttributes<Coordinate>,
@@ -16,7 +15,7 @@ export const coordinateAttributes = {
 };
 
 export const coordinateOptions: InitOptions = {
-  sequelize: sequelizeConnection,
+  sequelize,
   modelName: "Coordinate",
   tableName: "coordinates",
   timestamps: false,

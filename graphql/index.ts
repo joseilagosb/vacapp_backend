@@ -18,6 +18,13 @@ dotenv.config();
 const graphqlModules: Module[] = [];
 graphqlModules.push(require("./Area.ts")["area"]);
 graphqlModules.push(require("./Coordinate.ts")["coordinate"]);
+graphqlModules.push(require("./PlaceType.ts")["placeType"]);
+graphqlModules.push(require("./Service.ts")["service"]);
+graphqlModules.push(require("./Indicator.ts")["indicator"]);
+graphqlModules.push(require("./CurrentCrowd.ts")["currentCrowd"]);
+graphqlModules.push(require("./CurrentQueue.ts")["currentQueue"]);
+graphqlModules.push(require("./Place.ts")["place"]);
+graphqlModules.push(require("./PlaceWorkingDay.ts")["placeWorkingDay"]);
 
 // fs.readdirSync(__dirname)
 //   .filter((file) => {
@@ -32,7 +39,6 @@ graphqlModules.push(require("./Coordinate.ts")["coordinate"]);
 // Inicializa el servidor Apollo para levantar la API endpoint
 export const initApolloServer = async (app: Express) => {
   const graphQLApplication = createApplication({ modules: graphqlModules });
-  console.log(graphQLApplication);
   const schema = graphQLApplication.createSchemaForApollo();
 
   // El servidor requiere el middleware de permisos de usuario (autorización) y las funciones de contexto

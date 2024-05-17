@@ -9,7 +9,7 @@ import {
   InitOptions,
 } from "sequelize";
 
-import sequelizeConnection from "../database/connection";
+import sequelize from "../database/connection";
 
 import { Coordinate } from "./Coordinate";
 
@@ -33,7 +33,7 @@ export const areaAttributes = {
 };
 
 export const areaOptions: InitOptions<Area> = {
-  sequelize: sequelizeConnection,
+  sequelize,
   modelName: "Area",
   tableName: "areas",
   timestamps: false,
