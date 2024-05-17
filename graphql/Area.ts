@@ -19,15 +19,18 @@ const typeDefs: TypeDefs = [
 ];
 
 const resolvers: Resolvers = {
-  // Query: { allAreas: async () => Area.findAll() },
   Query: {
-    allAreas: async () => {
-      console.log(model);
-      return Area.findAll();
-    },
+    allAreas: async () => Area.findAll(),
   },
   Area: {
-    coordinates: (obj, __, ___, ____) => Coordinate.findAll({ where: { id: obj.id } }),
+    coordinates: (obj, __, ___, ____) =>
+      Coordinate.findAll({
+        include: {
+          model: Area,
+          as: "areas",
+          where: { id: obj.id },
+        },
+      }),
     // coordinates: async (
     //   obj: Area,
     //   args: EmptyArgs,

@@ -16,14 +16,18 @@ dotenv.config();
 
 // Cargamos todos los módulos GraphQL almacenados en este directorio
 const graphqlModules: Module[] = [];
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".ts";
-  })
-  .forEach((file) => {
-    const module = require(path.join(__dirname, file));
-    graphqlModules.push(module[Object.keys(module)[0]]);
-  });
+graphqlModules.push(require("./Area.ts")["area"]);
+graphqlModules.push(require("./Coordinate.ts")["coordinate"]);
+
+// fs.readdirSync(__dirname)
+//   .filter((file) => {
+//     return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".ts";
+//   })
+//   .forEach((file) => {
+//     const module = require(path.join(__dirname, file));
+//     console.log(file);
+//     graphqlModules.push(module[Object.keys(module)[0]]);
+//   });
 
 // Inicializa el servidor Apollo para levantar la API endpoint
 export const initApolloServer = async (app: Express) => {

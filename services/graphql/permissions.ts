@@ -11,14 +11,14 @@ const isAuthenticated = rule()((obj, args, context) => {
 export const permissions: IMiddlewareGenerator<any, any, any> = shield(
   {
     Query: {
-      "*": isAuthenticated,
+      "*": allow,
     },
-    Mutation: {
-      "*": isAuthenticated,
-      login: allow,
-      // signUp está habilitado en el entorno de desarrollo para poder crear un usuario de prueba fácilmente
-      signUp: process.env.NODE_ENV == "development" ? allow : deny,
-    },
+    // Mutation: {
+    //   "*": isAuthenticated,
+    //   login: allow,
+    //   // signUp está habilitado en el entorno de desarrollo para poder crear un usuario de prueba fácilmente
+    //   signUp: process.env.NODE_ENV == "development" ? allow : deny,
+    // },
   },
   {
     fallbackError: new GraphQLError(

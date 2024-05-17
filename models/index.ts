@@ -1,24 +1,17 @@
-"use strict";
-
 import fs from "fs";
 import path from "path";
-import { Sequelize, Model } from "sequelize";
-import credentials from "../database/config";
+const basename = path.basename(__filename);
+
+import { Area, Coordinate } from "./init";
 
 import dotenv from "dotenv";
+import { AreaCoordinate } from "./AreaCoordinate";
 dotenv.config();
 
-const basename = path.basename(__filename);
 const db: any = {};
-
-let sequelize = new Sequelize(credentials[process.env.NODE_ENV]);
-
-const area = require("./area/Area.init").default(sequelize);
-const coordinate = require("./coordinate/Coordinate.init").default(sequelize);
-db["Area"] = area;
-db["Coordinate"] = coordinate;
-
-console.log(db);
+db["Area"] = Area;
+db["AreaCoordinate"] = AreaCoordinate;
+db["Coordinate"] = Coordinate;
 
 // fs.readdirSync(__dirname)
 //   .filter((file) => {
@@ -28,11 +21,5 @@ console.log(db);
 //     const model = require(path.join(__dirname, file)).default(sequelize, DataTypes);
 //     db[model.name] = model;
 //   });
-
-// Object.keys(db).forEach((modelName) => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
-// });
 
 export default db;

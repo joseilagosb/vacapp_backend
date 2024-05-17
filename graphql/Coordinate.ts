@@ -1,15 +1,10 @@
-import { createModule, gql } from "graphql-modules";
-import model from "../models/index.js";
+import { TypeDefs, createModule, gql } from "graphql-modules";
 
-const { Coordinate } = model;
-
-const typeDefs = [
+const typeDefs: TypeDefs = [
   gql`
     scalar Decimal
 
-    type MyType {
-      myField: Decimal
-    }
+    type Query
 
     type Coordinate {
       id: ID!
