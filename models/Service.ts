@@ -30,11 +30,3 @@ export const serviceOptions: InitOptions = {
   tableName: "services",
   timestamps: false,
 };
-
-//     static associate(models) {
-//       models.Service.belongsToMany(models.Place, {
-//         as: "places",
-//         through: models.PlaceService,
-//         foreignKey: "service_id",
-//       });
-//     }

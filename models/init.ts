@@ -19,6 +19,7 @@ import {
   placeWorkingDayOptions,
 } from "./PlaceWorkingDay";
 import { Service, serviceAttributes, serviceOptions } from "./Service";
+import { User, userAttributes, userOptions } from "./User";
 
 Area.init(areaAttributes, areaOptions);
 AreaCoordinate.init(areaCoordinateAttributes, areaCoordinateOptions);
@@ -33,6 +34,7 @@ PlaceCoordinate.init(placeCoordinateAttributes, placeCoordinateOptions);
 PlaceService.init(placeServiceAttributes, placeServiceOptions);
 PlaceIndicator.init(placeIndicatorAttributes, placeIndicatorOptions);
 PlaceWorkingDay.init(placeWorkingDayAttributes, placeWorkingDayOptions);
+User.init(userAttributes, userOptions);
 
 Area.belongsToMany(Coordinate, {
   as: "coordinates",
@@ -109,4 +111,5 @@ export {
   PlaceService,
   PlaceIndicator,
   PlaceWorkingDay,
+  User,
 };

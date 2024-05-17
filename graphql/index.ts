@@ -9,7 +9,7 @@ import { applyMiddleware } from "graphql-middleware";
 import { ApolloServer } from "apollo-server-express";
 
 import { permissions } from "../services/graphql/permissions";
-// import { addToContext } from "../services/graphql/context";
+import { addToContext } from "../services/graphql/context";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -25,6 +25,8 @@ graphqlModules.push(require("./CurrentCrowd.ts")["currentCrowd"]);
 graphqlModules.push(require("./CurrentQueue.ts")["currentQueue"]);
 graphqlModules.push(require("./Place.ts")["place"]);
 graphqlModules.push(require("./PlaceWorkingDay.ts")["placeWorkingDay"]);
+
+graphqlModules.push(require("./User.ts")["user"]);
 
 // fs.readdirSync(__dirname)
 //   .filter((file) => {
@@ -45,7 +47,7 @@ export const initApolloServer = async (app: Express) => {
   // (los data loaders usados por los resolvers)
   const apolloServer = new ApolloServer({
     schema: applyMiddleware(schema, permissions),
-    // context: addToContext,
+    context: addToContext,
     csrfPrevention: true,
     introspection: process.env.NODE_ENV !== "production",
   });

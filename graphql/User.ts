@@ -1,15 +1,10 @@
-import { createModule, gql } from "graphql-modules";
-import model from "../models/index.js";
+import { TypeDefs, createModule, gql } from "graphql-modules";
 import { signUpUser, loginUser } from "../services/authentication";
 
-const { User } = model;
-
-const typeDefs = [
+const typeDefs: TypeDefs = [
   gql`
-    extend type Query {
-      allUsers: [User]
-      userById(id: ID!): User
-    }
+    type Query
+
     type Mutation {
       login(username: String!, password: String!): AuthPayload
       signUp(username: String!, password: String!): AuthPayload
@@ -27,12 +22,9 @@ const typeDefs = [
 ];
 
 const resolvers = {
-  Query: {
-    allUsers: async (obj, args, context, info) => User.findAll(),
-  },
   Mutation: {
-    login: async (obj, args, context, info) => loginUser(args.username, args.password),
-    signUp: async (obj, args, context, info) => signUpUser(args.username, args.password),
+    login: async (_, args, __, ___) => loginUser(args.username, args.password),
+    signUp: async (_, args, __, ___) => signUpUser(args.username, args.password),
   },
 };
 

@@ -11,6 +11,7 @@ export type AuthPayload = {
   __typename?: "AuthPayload";
   token: Scalars["String"]["output"];
   user: User;
+  message: Scalars["String"]["output"];
 };
 
 export type AverageCrowd = {
