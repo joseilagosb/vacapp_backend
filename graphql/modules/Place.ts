@@ -1,14 +1,14 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 import { Sequelize } from "sequelize";
 
-import Place from "../models/Place";
-import Coordinate from "../models/Coordinate";
-import PlaceType from "../models/PlaceType";
-import Indicator from "../models/Indicator";
-import Service from "../models/Service";
-import CurrentCrowd from "../models/CurrentCrowd";
-import CurrentQueue from "../models/CurrentQueue";
-import PlaceWorkingDay from "../models/PlaceWorkingDay";
+import Place from "../../database/models/Place";
+import Coordinate from "../../database/models/Coordinate";
+import PlaceType from "../../database/models/PlaceType";
+import Indicator from "../../database/models/Indicator";
+import Service from "../../database/models/Service";
+import CurrentCrowd from "../../database/models/CurrentCrowd";
+import CurrentQueue from "../../database/models/CurrentQueue";
+import PlaceWorkingDay from "../../database/models/PlaceWorkingDay";
 
 const typeDefs: TypeDefs = [
   gql`
@@ -74,12 +74,9 @@ const resolvers = {
         },
         raw: true,
       }),
-    place_working_days: async (obj, _, __, ___) =>
-      PlaceWorkingDay.findAll({ where: { place_id: obj.id } }),
-    current_crowds: async (obj, _, __, ___) =>
-      CurrentCrowd.findAll({ where: { place_id: obj.id } }),
-    current_queues: async (obj, _, __, ___) =>
-      CurrentQueue.findAll({ where: { place_id: obj.id } }),
+    place_working_days: async (obj, _, __, ___) => PlaceWorkingDay.findAll({ where: { place_id: obj.id } }),
+    current_crowds: async (obj, _, __, ___) => CurrentCrowd.findAll({ where: { place_id: obj.id } }),
+    current_queues: async (obj, _, __, ___) => CurrentQueue.findAll({ where: { place_id: obj.id } }),
   },
   // Place: {
   //   place_type: async (obj, args, context, info) =>

@@ -1,13 +1,10 @@
 import bcrypt from "bcrypt";
 
-import User from "../models/User";
+import User from "../database/models/User";
 
 import { getPasswordSchema } from "../utils/password";
 
-import {
-  IsValidPasswordResponse,
-  IsValidUserResponse,
-} from "../ts/types/services/user_validation.types";
+import { IsValidPasswordResponse, IsValidUserResponse } from "../ts/types/services/user_validation.types";
 
 // Valida la contraseña sobre las reglas establecidas en el schema
 const isValidPassword = (password: string): IsValidPasswordResponse => {
@@ -40,10 +37,7 @@ const isValidPassword = (password: string): IsValidPasswordResponse => {
   return { isValidPassword: true };
 };
 
-export const isValidNewUser = async (
-  username: string,
-  password: string
-): Promise<IsValidUserResponse> => {
+export const isValidNewUser = async (username: string, password: string): Promise<IsValidUserResponse> => {
   const usernameIsTaken = await User.findOne({ where: { username } });
   if (usernameIsTaken) {
     return {
@@ -60,10 +54,7 @@ export const isValidNewUser = async (
   return { isValidUser: true };
 };
 
-export const isValidExistingUser = async (
-  username: string,
-  password: string
-): Promise<IsValidUserResponse> => {
+export const isValidExistingUser = async (username: string, password: string): Promise<IsValidUserResponse> => {
   const user = await User.findOne({ where: { username } });
   if (!user) {
     return {

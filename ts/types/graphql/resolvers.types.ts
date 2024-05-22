@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from "graphql";
 
-import Area from "../../../models/Area";
-import Coordinate from "../../../models/Coordinate";
+import Area from "../../../database/models/Area";
+import Coordinate from "../../../database/models/Coordinate";
 
 import { GraphQLContext } from "./context.types";
 import { Maybe, ResolverTypeWrapper, ResolversObject, Scalars } from "./utils.types";
@@ -76,11 +76,7 @@ export type AreaResolvers<
 > = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   area_name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  coordinates?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes["Coordinate"]>>>,
-    ParentType,
-    ContextType
-  >;
+  coordinates?: Resolver<Maybe<Array<Maybe<ResolversTypes["Coordinate"]>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -90,12 +86,7 @@ export type MutationResolvers<
   ContextType = GraphQLContext,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = ResolversObject<{
-  login?: Resolver<
-    Maybe<ResolversTypes["AuthPayload"]>,
-    ParentType,
-    ContextType,
-    Partial<LoginMutationVariables>
-  >;
+  login?: Resolver<Maybe<ResolversTypes["AuthPayload"]>, ParentType, ContextType, Partial<LoginMutationVariables>>;
 }>;
 
 export type QueryResolvers<

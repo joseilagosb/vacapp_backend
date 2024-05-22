@@ -1,7 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import User from "../models/User";
+import User from "../database/models/User";
 
 import { isValidExistingUser, isValidNewUser } from "./user_validation";
 
@@ -46,8 +46,7 @@ export const loginUser = async (username: string, password: string): Promise<Aut
     return {
       token,
       user: response.user,
-      message:
-        "Has iniciado sesión con éxito. Recuerda guardar este token para realizar consultas a la API.",
+      message: "Has iniciado sesión con éxito. Recuerda guardar este token para realizar consultas a la API.",
     };
   } catch (error) {
     throw new Error(error.message);

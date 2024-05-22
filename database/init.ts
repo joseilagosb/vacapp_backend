@@ -8,7 +8,7 @@ dotenv.config();
 
 let sequelize = new Sequelize({
   ...credentials,
-  models: [path.join(__dirname, "..", "models")],
+  models: [path.join(__dirname, "models")],
 });
 
 export default sequelize;

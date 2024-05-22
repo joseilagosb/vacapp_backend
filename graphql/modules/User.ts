@@ -1,5 +1,5 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
-import { signUpUser, loginUser } from "../services/authentication";
+import { signUpUser, loginUser } from "../../services/authentication";
 
 const typeDefs: TypeDefs = [
   gql`
