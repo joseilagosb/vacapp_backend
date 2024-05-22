@@ -1,17 +1,14 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 import { Sequelize } from "sequelize";
 
-import model from "../models";
-const {
-  Place,
-  Coordinate,
-  Service,
-  Indicator,
-  PlaceType,
-  CurrentCrowd,
-  CurrentQueue,
-  PlaceWorkingDay,
-} = model;
+import Place from "../models/Place";
+import Coordinate from "../models/Coordinate";
+import PlaceType from "../models/PlaceType";
+import Indicator from "../models/Indicator";
+import Service from "../models/Service";
+import CurrentCrowd from "../models/CurrentCrowd";
+import CurrentQueue from "../models/CurrentQueue";
+import PlaceWorkingDay from "../models/PlaceWorkingDay";
 
 const typeDefs: TypeDefs = [
   gql`
@@ -30,9 +27,9 @@ const typeDefs: TypeDefs = [
       coordinates: [Coordinate]
       services: [Service]
       indicators: [PlaceIndicator]
-      place_working_days: [PlaceWorkingDay]
       current_crowds: [CurrentCrowd]
       current_queues: [CurrentQueue]
+      place_working_days: [PlaceWorkingDay]
     }
   `,
 ];

@@ -1,40 +1,19 @@
-import {
-  Association,
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-  Model,
-  NonAttribute,
-  DataTypes,
-  InitOptions,
-} from "sequelize";
+import { BelongsToMany, Column, Model, Table } from "sequelize-typescript";
 
-import sequelize from "../database/connection";
+import Coordinate from "./Coordinate";
+import AreaCoordinate from "./AreaCoordinate";
 
-import { Coordinate } from "./Coordinate";
-
-export class Area extends Model<InferAttributes<Area>, InferCreationAttributes<Area>> {
-  declare id: CreationOptional<number>;
-  declare area_name: string;
-  declare coordinates?: NonAttribute<Array<Coordinate>>;
-
-  declare static associations: {
-    coordinates: Association<Area, Coordinate>;
-  };
-}
-
-export const areaAttributes = {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: false,
-    primaryKey: true,
-  },
-  area_name: DataTypes.STRING,
-};
-
-export const areaOptions: InitOptions<Area> = {
-  sequelize,
+@Table({
   modelName: "Area",
   tableName: "areas",
   timestamps: false,
-};
+})
+class Area extends Model {
+  @Column
+  area_name: string;
+
+  @BelongsToMany(() => Coordinate, () => AreaCoordinate)
+  coordinates: Array<Coordinate>;
+}
+
+export default Area;

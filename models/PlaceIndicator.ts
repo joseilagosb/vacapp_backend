@@ -1,27 +1,21 @@
-import { ForeignKey, InferAttributes, InferCreationAttributes, Model, DataTypes } from "sequelize";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
 
-import sequelize from "../database/connection";
+import Place from "./Place";
+import Indicator from "./Indicator";
 
-export class PlaceIndicator extends Model<
-  InferAttributes<PlaceIndicator>,
-  InferCreationAttributes<PlaceIndicator>
-> {
-  declare place_id: ForeignKey<number>;
-  declare indicator_id: ForeignKey<number>;
-  declare indicator_value: number;
-  declare opinion_no: number;
-}
-
-export const placeIndicatorAttributes = {
-  place_id: DataTypes.INTEGER,
-  indicator_id: DataTypes.INTEGER,
-  indicator_value: DataTypes.FLOAT,
-  opinion_no: DataTypes.INTEGER,
-};
-
-export const placeIndicatorOptions = {
-  sequelize,
+@Table({
   modelName: "PlaceIndicator",
   tableName: "place_indicator",
   timestamps: false,
-};
+})
+class PlaceIndicator extends Model {
+  @ForeignKey(() => Place)
+  @Column
+  place_id: number;
+
+  @ForeignKey(() => Indicator)
+  @Column
+  indicator_id: number;
+}
+
+export default PlaceIndicator;

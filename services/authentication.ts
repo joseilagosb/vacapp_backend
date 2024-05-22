@@ -1,14 +1,15 @@
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
+import User from "../models/User";
+
 import { isValidExistingUser, isValidNewUser } from "./user_validation";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-import model from "../models";
 import { IsValidUserResponse } from "../ts/types/services/user_validation.types";
 import { AuthPayload } from "../ts/types/graphql/typedefs.types";
-const { User } = model;
 
 const signToken = (id: string, username: string) =>
   jsonwebtoken.sign({ id, username }, process.env.JWT_SECRET, { expiresIn: "7d" });

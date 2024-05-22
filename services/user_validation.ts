@@ -1,14 +1,13 @@
 import bcrypt from "bcrypt";
 
+import User from "../models/User";
+
 import { getPasswordSchema } from "../utils/password";
 
 import {
   IsValidPasswordResponse,
   IsValidUserResponse,
 } from "../ts/types/services/user_validation.types";
-
-import model from "../models";
-const { User } = model;
 
 // Valida la contraseña sobre las reglas establecidas en el schema
 const isValidPassword = (password: string): IsValidPasswordResponse => {

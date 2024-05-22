@@ -1,40 +1,24 @@
-import {
-  InferAttributes,
-  InferCreationAttributes,
-  Model,
-  DataTypes,
-  CreationOptional,
-  ForeignKey,
-} from "sequelize";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
+import Place from "./Place";
 
-import sequelize from "../database/connection";
-
-export class PlaceWorkingDay extends Model<
-  InferAttributes<PlaceWorkingDay>,
-  InferCreationAttributes<PlaceWorkingDay>
-> {
-  declare id: CreationOptional<number>;
-  declare place_id: ForeignKey<number>;
-  declare day_of_week: number;
-  declare opening_time: Date;
-  declare closing_time: Date;
-}
-
-export const placeWorkingDayAttributes = {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: false,
-    primaryKey: true,
-  },
-  place_id: DataTypes.INTEGER,
-  day_of_week: DataTypes.INTEGER,
-  opening_time: DataTypes.TIME,
-  closing_time: DataTypes.TIME,
-};
-
-export const placeWorkingDayOptions = {
-  sequelize,
+@Table({
   modelName: "PlaceWorkingDay",
   tableName: "place_working_days",
   timestamps: false,
-};
+})
+class PlaceWorkingDay extends Model {
+  @ForeignKey(() => Place)
+  @Column
+  place_id: number;
+
+  @Column
+  day_of_week: number;
+
+  @Column
+  opening_time: Date;
+
+  @Column
+  closing_time: Date;
+}
+
+export default PlaceWorkingDay;

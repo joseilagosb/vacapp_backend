@@ -1,7 +1,6 @@
 import { Dialect, Options } from "sequelize";
-import { Environment } from "../enums/utils.enums";
 
-export type DatabaseCredentials = {
+export type DatabaseOptions = {
   database: string;
   username: string;
   password: string | undefined;
@@ -9,7 +8,3 @@ export type DatabaseCredentials = {
   dialect: Dialect | undefined;
   port: number | undefined;
 } & Options;
-
-export type DatabaseCredentialsByEnv = {
-  [key in Environment]: DatabaseCredentials;
-};

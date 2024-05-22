@@ -1,37 +1,25 @@
-import {
-  CreationOptional,
-  DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
-  InitOptions,
-  Model,
-} from "sequelize";
-import sequelize from "../database/connection";
+import { BelongsToMany, Column, Model, Table } from "sequelize-typescript";
 
-export class Indicator extends Model<
-  InferAttributes<Indicator>,
-  InferCreationAttributes<Indicator>
-> {
-  declare id: CreationOptional<number>;
-  declare indicator_name: string;
-  declare indicator_type: number;
-  declare indicator_description: number;
-}
+import Place from "./Place";
+import PlaceIndicator from "./PlaceIndicator";
 
-export const indicatorAttributes = {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: false,
-    primaryKey: true,
-  },
-  indicator_name: DataTypes.STRING,
-  indicator_type: DataTypes.INTEGER,
-  indicator_description: DataTypes.STRING,
-};
-
-export const indicatorOptions: InitOptions = {
-  sequelize,
+@Table({
   modelName: "Indicator",
   tableName: "indicators",
   timestamps: false,
-};
+})
+class Indicator extends Model {
+  @Column
+  indicator_name: string;
+
+  @Column
+  indicator_type: number;
+
+  @Column
+  indicator_description: number;
+
+  @BelongsToMany(() => Place, () => PlaceIndicator)
+  places: Array<Place>;
+}
+
+export default Indicator;

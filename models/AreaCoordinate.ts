@@ -1,23 +1,21 @@
-import { ForeignKey, InferAttributes, InferCreationAttributes, Model, DataTypes } from "sequelize";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
 
-import sequelize from "../database/connection";
+import Area from "./Area";
+import Coordinate from "./Coordinate";
 
-export class AreaCoordinate extends Model<
-  InferAttributes<AreaCoordinate>,
-  InferCreationAttributes<AreaCoordinate>
-> {
-  declare area_id: ForeignKey<number>;
-  declare coordinate_id: ForeignKey<number>;
-}
-
-export const areaCoordinateAttributes = {
-  area_id: DataTypes.INTEGER,
-  coordinate_id: DataTypes.INTEGER,
-};
-
-export const areaCoordinateOptions = {
-  sequelize,
+@Table({
   modelName: "AreaCoordinate",
   tableName: "area_coordinate",
   timestamps: false,
-};
+})
+class AreaCoordinate extends Model {
+  @ForeignKey(() => Area)
+  @Column
+  area_id: number;
+
+  @ForeignKey(() => Coordinate)
+  @Column
+  coordinate_id: number;
+}
+
+export default AreaCoordinate;

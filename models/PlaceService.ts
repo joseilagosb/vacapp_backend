@@ -1,23 +1,21 @@
-import { ForeignKey, InferAttributes, InferCreationAttributes, Model, DataTypes } from "sequelize";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
 
-import sequelize from "../database/connection";
+import Place from "./Place";
+import Service from "./Service";
 
-export class PlaceService extends Model<
-  InferAttributes<PlaceService>,
-  InferCreationAttributes<PlaceService>
-> {
-  declare place_id: ForeignKey<number>;
-  declare service_id: ForeignKey<number>;
-}
-
-export const placeServiceAttributes = {
-  place_id: DataTypes.INTEGER,
-  service_id: DataTypes.INTEGER,
-};
-
-export const placeServiceOptions = {
-  sequelize,
+@Table({
   modelName: "PlaceService",
   tableName: "place_service",
   timestamps: false,
-};
+})
+class PlaceService extends Model {
+  @ForeignKey(() => Place)
+  @Column
+  place_id: number;
+
+  @ForeignKey(() => Service)
+  @Column
+  service_id: number;
+}
+
+export default PlaceService;

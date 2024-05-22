@@ -1,32 +1,21 @@
-import {
-  CreationOptional,
-  DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
-  InitOptions,
-  Model,
-} from "sequelize";
-import sequelize from "../database/connection";
+import { BelongsToMany, Column, Model, Table } from "sequelize-typescript";
+import Place from "./Place";
+import PlaceService from "./PlaceService";
 
-export class Service extends Model<InferAttributes<Service>, InferCreationAttributes<Service>> {
-  declare id: CreationOptional<number>;
-  declare service_name: string;
-  declare service_description: string;
-}
-
-export const serviceAttributes = {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: false,
-    primaryKey: true,
-  },
-  service_name: DataTypes.STRING,
-  service_description: DataTypes.STRING,
-};
-
-export const serviceOptions: InitOptions = {
-  sequelize,
+@Table({
   modelName: "Service",
   tableName: "services",
   timestamps: false,
-};
+})
+class Service extends Model {
+  @Column
+  service_name: string;
+
+  @Column
+  service_description: string;
+
+  @BelongsToMany(() => Place, () => PlaceService)
+  places: Array<Place>;
+}
+
+export default Service;

@@ -1,7 +1,11 @@
 import { GraphQLResolveInfo } from "graphql";
+
+import Area from "../../../models/Area";
+import Coordinate from "../../../models/Coordinate";
+
 import { GraphQLContext } from "./context.types";
 import { Maybe, ResolverTypeWrapper, ResolversObject, Scalars } from "./utils.types";
-import { Area, AuthPayload, Coordinate, User } from "./typedefs.types";
+import { AuthPayload, User } from "./typedefs.types";
 import { LoginMutationVariables } from "./mutations/login.types";
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -72,7 +76,11 @@ export type AreaResolvers<
 > = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   area_name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  coordinates?: Resolver<Maybe<ResolversTypes["Coordinate"]>, ParentType, ContextType>;
+  coordinates?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["Coordinate"]>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -1,9 +1,7 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 
-import model from "../models/index";
-const { Service } = model;
-
 import { Resolvers } from "../ts/types/graphql/resolvers.types.js";
+import Service from "../models/Service";
 
 const typeDefs: TypeDefs = [
   gql`

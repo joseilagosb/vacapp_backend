@@ -1,22 +1,27 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, InitOptions, Model } from "sequelize";
-import sequelize from "../database/connection";
+import { BelongsToMany, Column, Model, Table } from "sequelize-typescript";
 
-export class Coordinate extends Model<
-  InferAttributes<Coordinate>,
-  InferCreationAttributes<Coordinate>
-> {
-  declare latitude: Number;
-  declare longitude: Number;
-}
+import Area from "./Area";
+import AreaCoordinate from "./AreaCoordinate";
+import Place from "./Place";
+import PlaceCoordinate from "./PlaceCoordinate";
 
-export const coordinateAttributes = {
-  latitude: DataTypes.DECIMAL,
-  longitude: DataTypes.DECIMAL,
-};
-
-export const coordinateOptions: InitOptions = {
-  sequelize,
+@Table({
   modelName: "Coordinate",
   tableName: "coordinates",
   timestamps: false,
-};
+})
+class Coordinate extends Model {
+  @Column
+  latitude: number;
+
+  @Column
+  longitude: number;
+
+  @BelongsToMany(() => Area, () => AreaCoordinate)
+  areas: Array<Area>;
+
+  @BelongsToMany(() => Place, () => PlaceCoordinate)
+  places: Array<Place>;
+}
+
+export default Coordinate;

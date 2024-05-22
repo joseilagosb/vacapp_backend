@@ -1,23 +1,21 @@
-import { ForeignKey, InferAttributes, InferCreationAttributes, Model, DataTypes } from "sequelize";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
 
-import sequelize from "../database/connection";
+import Place from "./Place";
+import Coordinate from "./Coordinate";
 
-export class PlaceCoordinate extends Model<
-  InferAttributes<PlaceCoordinate>,
-  InferCreationAttributes<PlaceCoordinate>
-> {
-  declare place_id: ForeignKey<number>;
-  declare coordinate_id: ForeignKey<number>;
-}
-
-export const placeCoordinateAttributes = {
-  place_id: DataTypes.INTEGER,
-  coordinate_id: DataTypes.INTEGER,
-};
-
-export const placeCoordinateOptions = {
-  sequelize,
+@Table({
   modelName: "PlaceCoordinate",
   tableName: "place_coordinate",
   timestamps: false,
-};
+})
+class PlaceCoordinate extends Model {
+  @ForeignKey(() => Place)
+  @Column
+  place_id: number;
+
+  @ForeignKey(() => Coordinate)
+  @Column
+  coordinate_id: number;
+}
+
+export default PlaceCoordinate;

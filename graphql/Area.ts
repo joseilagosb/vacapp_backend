@@ -1,7 +1,7 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 
-import model from "../models";
-const { Area, Coordinate } = model;
+import Area from "../models/Area";
+import Coordinate from "../models/Coordinate";
 
 import { Resolvers } from "../ts/types/graphql/resolvers.types";
 
