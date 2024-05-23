@@ -3,23 +3,22 @@ import bcrypt from "bcrypt";
 
 import User from "../database/models/User";
 
-import { isValidExistingUser, isValidNewUser } from "./user_validation";
+import { validateExistingUser, validateNewUser } from "./user_validation";
+
+import { AuthenticationPayload } from "../ts/types/services/authentication.types";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-import { IsValidUserResponse } from "../ts/types/services/user_validation.types";
-import { AuthPayload } from "../ts/types/graphql/typedefs.types";
-
 const signToken = (id: string, username: string) =>
   jsonwebtoken.sign({ id, username }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-export const signUpUser = async (username: string, password: string): Promise<AuthPayload> => {
+export const signUpUser = async (
+  username: string,
+  password: string
+): Promise<AuthenticationPayload> => {
   try {
-    const response: IsValidUserResponse = await isValidNewUser(username, password);
-    if (response.isValidUser === false) {
-      throw new Error(response.error);
-    }
+    await validateNewUser(username, password);
     const user = await User.create({
       username: username,
       password: await bcrypt.hash(password, 10),
@@ -36,17 +35,18 @@ export const signUpUser = async (username: string, password: string): Promise<Au
   }
 };
 
-export const loginUser = async (username: string, password: string): Promise<AuthPayload> => {
+export const loginUser = async (
+  username: string,
+  password: string
+): Promise<AuthenticationPayload> => {
   try {
-    const response: IsValidUserResponse = await isValidExistingUser(username, password);
-    if (response.isValidUser === false) {
-      throw new Error(response.error);
-    }
-    const token = signToken(response.user.id, response.user.username);
+    const user = await validateExistingUser(username, password);
+    const token = signToken(user.id, user.username);
     return {
       token,
-      user: response.user,
-      message: "Has iniciado sesión con éxito. Recuerda guardar este token para realizar consultas a la API.",
+      user,
+      message:
+        "Has iniciado sesión con éxito. Recuerda guardar este token para realizar consultas a la API.",
     };
   } catch (error) {
     throw new Error(error.message);
@@ -60,7 +60,9 @@ export const getCurrentUser = (req) => {
       const user = jsonwebtoken.verify(token, process.env.JWT_SECRET);
       return user;
     }
-  } catch {
-    return;
+  } catch (error) {
+    throw new Error(
+      "Ha ocurrido un error al verificar el token de autorización. Comprueba que fue insertado correctamente en la solicitud, o que no haya expirado."
+    );
   }
 };

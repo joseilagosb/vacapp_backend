@@ -5,7 +5,7 @@ import { Module } from "graphql-modules";
 
 export const getAllGraphqlModules = (): Array<Module> => {
   const graphqlModules = [];
-  const exceptions = ["CrowdReport.ts", "PlaceSnapshot.ts"];
+  const exceptions = ["PlaceSnapshot.ts"];
 
   const modulesDirectory = path.join(__dirname, "..", "graphql", "modules");
 

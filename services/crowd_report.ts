@@ -1,9 +1,23 @@
 import dayjs from "dayjs";
-import { getDayType } from "../utils/time";
-import { getAllPlaceCurrentCrowds } from "../queries/all_place_current_crowds";
 
-const divideCrowds = (crowdsMap) => {
-  var result = {
+import { getAllPlaceCurrentCrowds } from "../database/queries/all_place_current_crowds";
+
+import { getDayType } from "../utils/time";
+
+import {
+  AverageCrowdsMap,
+  CrowdRecord,
+  CrowdReport,
+  CrowdsMap,
+  DividedCrowdsMap,
+  TodayCrowdReport,
+  WeekCrowdReport,
+} from "../ts/types/services/crowd_report.types";
+
+import { DayType } from "../ts/enums/utils.enums";
+
+const getDividedCrowdsMap = (crowdsMap: CrowdsMap): DividedCrowdsMap => {
+  const result = {
     weekday: {
       morning: {},
       afternoon: {},
@@ -14,32 +28,32 @@ const divideCrowds = (crowdsMap) => {
       afternoon: {},
       evening: {},
     },
-  };
+  } as DividedCrowdsMap;
 
   for (let crowdKey in crowdsMap) {
     for (let hourKey in crowdsMap[crowdKey]) {
       const crowdObj = crowdsMap[crowdKey][hourKey];
-      if (crowdKey > 0 && crowdKey <= 5) {
+      if (+crowdKey > 0 && +crowdKey <= 5) {
         const weekdayObj = result["weekday"];
-        if (hourKey >= 6 && hourKey < 12) {
+        if (+hourKey >= 6 && +hourKey < 12) {
           weekdayObj["morning"][crowdKey] = weekdayObj["morning"][crowdKey] || {};
           weekdayObj["morning"][crowdKey][hourKey] = crowdObj;
-        } else if (hourKey >= 12 && hourKey < 18) {
+        } else if (+hourKey >= 12 && +hourKey < 18) {
           weekdayObj["afternoon"][crowdKey] = weekdayObj["afternoon"][crowdKey] || {};
           weekdayObj["afternoon"][crowdKey][hourKey] = crowdObj;
-        } else if (hourKey >= 18 && hourKey < 24) {
+        } else if (+hourKey >= 18 && +hourKey < 24) {
           weekdayObj["evening"][crowdKey] = weekdayObj["evening"][crowdKey] || {};
           weekdayObj["evening"][crowdKey][hourKey] = crowdObj;
         }
-      } else if (crowdKey > 5 && crowdKey <= 7) {
+      } else if (+crowdKey > 5 && +crowdKey <= 7) {
         const weekendObj = result["weekend"];
-        if (hourKey >= 6 && hourKey < 12) {
+        if (+hourKey >= 6 && +hourKey < 12) {
           weekendObj["morning"][crowdKey] = weekendObj["morning"][crowdKey] || {};
           weekendObj["morning"][crowdKey][hourKey] = crowdObj;
-        } else if (hourKey >= 12 && hourKey < 18) {
+        } else if (+hourKey >= 12 && +hourKey < 18) {
           weekendObj["afternoon"][crowdKey] = weekendObj["afternoon"][crowdKey] || {};
           weekendObj["afternoon"][crowdKey][hourKey] = crowdObj;
-        } else if (hourKey >= 18 && hourKey < 24) {
+        } else if (+hourKey >= 18 && +hourKey < 24) {
           weekendObj["evening"][crowdKey] = weekendObj["evening"][crowdKey] || {};
           weekendObj["evening"][crowdKey][hourKey] = crowdObj;
         }
@@ -50,7 +64,7 @@ const divideCrowds = (crowdsMap) => {
   return result;
 };
 
-const getAverageCrowdsByHour = (crowdsMap) => {
+const getAverageCrowdsByHour = (crowdsMap: CrowdsMap): CrowdRecord => {
   const averageCrowds = {};
   const instancesByHour = {};
   for (let dayKey in crowdsMap) {
@@ -72,34 +86,34 @@ const getAverageCrowdsByHour = (crowdsMap) => {
   return averageCrowds;
 };
 
-const getAverageCrowdsObj = (dividedCrowds) => {
-  const averageCrowds = {
+const getAverageCrowdsMap = (dividedCrowdsMap: DividedCrowdsMap): AverageCrowdsMap => {
+  const averageCrowdsMap = {
     weekday: { morning: {}, afternoon: {}, evening: {} },
     weekend: { morning: {}, afternoon: {}, evening: {} },
-  };
+  } as AverageCrowdsMap;
 
-  for (let dayTypeKey in dividedCrowds) {
-    for (let periodKey in dividedCrowds[dayTypeKey]) {
-      averageCrowds[dayTypeKey][periodKey] = getAverageCrowdsByHour(
-        dividedCrowds[dayTypeKey][periodKey]
+  for (let dayTypeKey in dividedCrowdsMap) {
+    for (let periodKey in dividedCrowdsMap[dayTypeKey]) {
+      averageCrowdsMap[dayTypeKey][periodKey] = getAverageCrowdsByHour(
+        dividedCrowdsMap[dayTypeKey][periodKey]
       );
     }
   }
 
-  return averageCrowds;
+  return averageCrowdsMap;
 };
 
-const getTodayCrowdReport = (dividedCrowds, day, hour) => {
+const getTodayCrowdReport = (dividedCrowdsMap: DividedCrowdsMap, day: number): TodayCrowdReport => {
   const dayType = getDayType(day);
-  const crowdsObj = dividedCrowds[dayType];
+  const crowdsMap = dividedCrowdsMap[dayType];
 
-  const todayCrowdReport = {
+  const todayCrowdReport: TodayCrowdReport = {
     lowest_today_crowd: [],
     highest_today_crowd: [],
   };
 
-  for (let periodKey in crowdsObj) {
-    if (Object.keys(crowdsObj[periodKey]).length === 0) {
+  for (let periodKey in crowdsMap) {
+    if (Object.keys(crowdsMap[periodKey]).length === 0) {
       todayCrowdReport["lowest_today_crowd"].push({
         time_period: periodKey,
         hour: -1,
@@ -112,18 +126,18 @@ const getTodayCrowdReport = (dividedCrowds, day, hour) => {
       });
       continue;
     }
-    const todayCrowds = crowdsObj[periodKey][day];
+    const todayCrowds = crowdsMap[periodKey][day];
     const hoursKeys = Object.keys(todayCrowds);
     const sortedHoursKeys = hoursKeys.sort((prev, curr) => todayCrowds[prev] - todayCrowds[curr]);
 
     todayCrowdReport["lowest_today_crowd"].push({
       time_period: periodKey,
-      hour: sortedHoursKeys[0],
+      hour: +sortedHoursKeys[0],
       people_no: todayCrowds[sortedHoursKeys[0]],
     });
     todayCrowdReport["highest_today_crowd"].push({
       time_period: periodKey,
-      hour: sortedHoursKeys[sortedHoursKeys.length - 1],
+      hour: +sortedHoursKeys[sortedHoursKeys.length - 1],
       people_no: todayCrowds[sortedHoursKeys[sortedHoursKeys.length - 1]],
     });
   }
@@ -131,11 +145,21 @@ const getTodayCrowdReport = (dividedCrowds, day, hour) => {
   return todayCrowdReport;
 };
 
-const getWeekCrowdReport = (averageCrowds) => {
+const getWeekCrowdReport = (averageCrowds: AverageCrowdsMap): Array<WeekCrowdReport> => {
   const weekCrowdReport = [
-    { type: "weekday", highest_average_crowd: [], lowest_average_crowd: [], average_people_no: [] },
-    { type: "weekend", highest_average_crowd: [], lowest_average_crowd: [], average_people_no: [] },
-  ];
+    {
+      type: DayType.Weekday,
+      highest_average_crowd: [],
+      lowest_average_crowd: [],
+      average_people_no: [],
+    },
+    {
+      type: DayType.Weekend,
+      highest_average_crowd: [],
+      lowest_average_crowd: [],
+      average_people_no: [],
+    },
+  ] as Array<WeekCrowdReport>;
 
   for (let dayTypeIdx = 0; dayTypeIdx < Object.keys(averageCrowds).length; dayTypeIdx++) {
     const dayTypeKey = weekCrowdReport[dayTypeIdx]["type"];
@@ -155,7 +179,7 @@ const getWeekCrowdReport = (averageCrowds) => {
         continue;
       }
 
-      const hoursKeys = Object.keys(currentCrowdObj);
+      const hoursKeys = Object.keys(currentCrowdObj).map(Number);
       const sortedHoursKeys = hoursKeys.sort(
         (prev, curr) => currentCrowdObj[prev] - currentCrowdObj[curr]
       );
@@ -172,8 +196,9 @@ const getWeekCrowdReport = (averageCrowds) => {
       });
 
       const crowdAverageInPeriod =
-        Object.values(currentCrowdObj).reduce((prev, curr) => prev + curr, 0) /
-        Object.keys(currentCrowdObj).length;
+        Object.values(currentCrowdObj)
+          .map(Number)
+          .reduce((prev, curr) => prev + curr, 0) / Object.keys(currentCrowdObj).length;
       weekCrowdReport[dayTypeIdx]["average_people_no"].push({
         time_period: periodKey,
         people_no: Math.round(crowdAverageInPeriod),
@@ -184,7 +209,7 @@ const getWeekCrowdReport = (averageCrowds) => {
   return weekCrowdReport;
 };
 
-const getTomorrowPeopleNoAtSameTime = (crowdsMap, day, hour) => {
+const getTomorrowPeopleNoAtSameTime = (crowdsMap, day: number, hour: number): number => {
   const tomorrow = day === 7 ? 1 : day + 1;
 
   if (!(tomorrow in crowdsMap)) {
@@ -198,7 +223,7 @@ const getTomorrowPeopleNoAtSameTime = (crowdsMap, day, hour) => {
   return crowdsMap[tomorrow][hour];
 };
 
-const getLeastCrowdedDaySameTime = (crowdsMap, hour) => {
+const getLeastCrowdedDaySameTime = (crowdsMap, hour: number): number | undefined => {
   let leastCrowdedDay = undefined;
   let lowestCrowdNumber = Infinity;
   for (let dayKey in crowdsMap) {
@@ -216,22 +241,22 @@ const getLeastCrowdedDaySameTime = (crowdsMap, hour) => {
   return leastCrowdedDay;
 };
 
-export const getCrowdReport = async (placeId) => {
+export const getCrowdReport = async (placeId: number): Promise<CrowdReport> => {
   const crowdsList = await getAllPlaceCurrentCrowds(placeId);
-  const crowdsMap = crowdsList.reduce((acc, crowd) => {
+  const crowdsMap: CrowdsMap = crowdsList.reduce((acc, crowd) => {
     acc[crowd["crowd_day_of_week"]] = acc[crowd["crowd_day_of_week"]] || {};
     acc[crowd["crowd_day_of_week"]][crowd["crowd_hour"]] = crowd["people_no"];
     return acc;
-  }, {});
+  }, {} as CrowdsMap);
 
-  const dividedCrowds = divideCrowds(crowdsMap);
+  const dividedCrowdsMap = getDividedCrowdsMap(crowdsMap);
 
   const today = dayjs();
   const day = today.day() === 0 ? 7 : today.day();
   const hour = today.hour();
 
-  const averageCrowds = getAverageCrowdsObj(dividedCrowds);
-  const todayCrowdReport = getTodayCrowdReport(dividedCrowds, day, hour);
+  const averageCrowds = getAverageCrowdsMap(dividedCrowdsMap);
+  const todayCrowdReport = getTodayCrowdReport(dividedCrowdsMap, day);
   const weekCrowdReport = getWeekCrowdReport(averageCrowds);
 
   return {

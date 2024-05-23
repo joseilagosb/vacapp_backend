@@ -4,10 +4,8 @@ import User from "../database/models/User";
 
 import { getPasswordSchema } from "../utils/password";
 
-import { IsValidPasswordResponse, IsValidUserResponse } from "../ts/types/services/user_validation.types";
-
 // Valida la contraseña sobre las reglas establecidas en el schema
-const isValidPassword = (password: string): IsValidPasswordResponse => {
+const validatePassword = (password: string) => {
   const errors = getPasswordSchema().validate(password, { list: true }) as Array<string>;
   let errorMessage = "";
   if (errors.length > 0) {
@@ -32,44 +30,30 @@ const isValidPassword = (password: string): IsValidPasswordResponse => {
         errorMessage += " | ";
       }
     }
-    return { isValidPassword: false, error: errorMessage };
+    throw new Error(errorMessage);
   }
-  return { isValidPassword: true };
+  return true;
 };
 
-export const isValidNewUser = async (username: string, password: string): Promise<IsValidUserResponse> => {
+export const validateNewUser = async (username: string, password: string) => {
   const usernameIsTaken = await User.findOne({ where: { username } });
   if (usernameIsTaken) {
-    return {
-      isValidUser: false,
-      error: "El nombre de usuario ingresado ya existe!",
-    };
+    throw new Error("El nombre de usuario ingresado ya existe!");
   }
 
-  const response = isValidPassword(password);
-  if (response.isValidPassword === false) {
-    return { isValidUser: false, error: response.error };
-  }
-
-  return { isValidUser: true };
+  validatePassword(password);
 };
 
-export const isValidExistingUser = async (username: string, password: string): Promise<IsValidUserResponse> => {
+export const validateExistingUser = async (username: string, password: string) => {
   const user = await User.findOne({ where: { username } });
   if (!user) {
-    return {
-      isValidUser: false,
-      error: "El nombre de usuario o contraseña no son válidos.",
-    };
+    throw new Error("El nombre de usuario o contraseña no son válidos.");
   }
 
   const passwordsMatch = await bcrypt.compare(password, user.password);
   if (!passwordsMatch) {
-    return {
-      isValidUser: false,
-      error: "El nombre de usuario o contraseña no son válidos.",
-    };
+    throw new Error("El nombre de usuario o contraseña no son válidos.");
   }
 
-  return { isValidUser: true, user };
+  return user;
 };

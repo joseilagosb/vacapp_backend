@@ -1,7 +1,10 @@
-import { createModule, gql } from "graphql-modules";
+import { TypeDefs, createModule, gql } from "graphql-modules";
+
 import { getCrowdReport } from "../../services/crowd_report";
 
-const typeDefs = [
+import { Resolvers } from "../../ts/types/graphql/resolvers.types";
+
+const typeDefs: TypeDefs = [
   gql`
     extend type Query {
       crowdReport(placeId: Int): CrowdReport
@@ -43,7 +46,7 @@ const typeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     crowdReport: async (obj, args, context, info) => getCrowdReport(args.placeId),
   },
