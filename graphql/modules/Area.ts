@@ -1,7 +1,6 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 
 import Area from "../../database/models/Area";
-import Coordinate from "../../database/models/Coordinate";
 
 import { Resolvers } from "../../ts/types/graphql/resolvers.types";
 
@@ -19,24 +18,9 @@ const typeDefs: TypeDefs = [
 ];
 
 const resolvers: Resolvers = {
-  Query: {
-    allAreas: async () => Area.findAll(),
-  },
+  Query: { allAreas: async () => Area.findAll() },
   Area: {
-    coordinates: (obj, __, ___, ____) =>
-      Coordinate.findAll({
-        include: {
-          model: Area,
-          as: "areas",
-          where: { id: obj.id },
-        },
-      }),
-    // coordinates: async (
-    //   obj: Area,
-    //   args: EmptyArgs,
-    //   context: GraphQLContext,
-    //   info: GraphQLResolveInfo
-    // ) => await context.areaLoader.coordinates.load(obj.id),
+    coordinates: async (obj, __, { loaders }, ____) => await loaders.area.coordinates.load(obj.id),
   },
 };
 

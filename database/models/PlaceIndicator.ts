@@ -16,6 +16,12 @@ class PlaceIndicator extends Model {
   @ForeignKey(() => Indicator)
   @Column
   indicator_id: number;
+
+  @Column
+  indicator_value: number;
+
+  @Column
+  opinion_no: number;
 }
 
 export default PlaceIndicator;

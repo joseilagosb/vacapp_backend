@@ -1,33 +1,29 @@
 import DataLoader from "dataloader";
 
-import model from "../../models";
-const {
-  PlaceType,
-  Coordinate,
-  PlaceWorkingDay,
-  Place,
-  Service,
-  Indicator,
-  CurrentCrowd,
-  CurrentQueue,
-  Area,
-} = model;
+import PlaceType from "../../database/models/PlaceType";
+import Place from "../../database/models/Place";
+import Coordinate from "../../database/models/Coordinate";
+import Service from "../../database/models/Service";
+import Indicator from "../../database/models/Indicator";
+import PlaceIndicator from "../../database/models/PlaceIndicator";
+import PlaceWorkingDay from "../../database/models/PlaceWorkingDay";
+import CurrentCrowd from "../../database/models/CurrentCrowd";
+import CurrentQueue from "../../database/models/CurrentQueue";
 
-// Funciones de utilidad para reducir el número de consultas a la base de datos (problema N + 1) y almacenar
-// en caché operaciones realizadas con anterioridad. Especialmente útil para consultas exigentes como allPlaces(), que
-// requiere la consulta de varias tablas relacionadas a Place.
+import { allMatchesByKeys } from "../../database/queries/all_matches_by_keys";
+
 export default {
-  placeLoader: {
+  place: {
     placeTypes: new DataLoader(async (keys) => {
       const placeTypes = await PlaceType.findAll();
       return keys.map((key) => placeTypes.filter((placeType) => placeType.id === key));
     }),
     coordinates: new DataLoader(async (keys) => {
-      const coordinates = await Place.findByPlaceKeys(Coordinate, keys);
+      const coordinates = await allMatchesByKeys(Coordinate, keys, Place);
       return keys.map((key) => coordinates.filter((coordinate) => coordinate.places[0].id === key));
     }),
     services: new DataLoader(async (keys) => {
-      const services = await Place.findByPlaceKeys(Service, keys);
+      const services = await allMatchesByKeys(Service, keys, Place);
       return keys.map((key) =>
         services.filter((service) => {
           return service.places.some((place) => place.id === key);
@@ -35,14 +31,15 @@ export default {
       );
     }),
     indicators: new DataLoader(async (keys) => {
-      const indicators = await Place.findByPlaceKeys(Indicator, keys);
+      const indicators = await allMatchesByKeys(Indicator, keys, Place);
       return keys.map((key) =>
         indicators.map((indicator) => {
-          const place = indicator.places.find((place) => place.id === key);
+          const place = indicator.places.find((place) => place.id === key) as any;
+          const placeIndicator = place.placeIndicator as PlaceIndicator;
           return {
             ...indicator.dataValues,
-            indicator_value: place.PlaceIndicator.indicator_value,
-            opinion_no: place.PlaceIndicator.opinion_no,
+            indicator_value: placeIndicator.indicator_value,
+            opinion_no: placeIndicator.opinion_no,
           };
         })
       );
@@ -64,12 +61,6 @@ export default {
       return keys.map((key) =>
         currentQueues.filter((currentQueue) => currentQueue.place_id === key)
       );
-    }),
-  },
-  areaLoader: {
-    coordinates: new DataLoader(async (keys) => {
-      const coordinates = await Area.findByAreaKeys(Coordinate, keys);
-      return keys.map((key) => coordinates.filter((coordinate) => coordinate.areas[0].id === key));
     }),
   },
 };
