@@ -35,12 +35,15 @@ const validatePassword = (password: string) => {
   return true;
 };
 
-export const validateNewUser = async (username: string, password: string) => {
+const validateUniqueUsername = async (username: string) => {
   const usernameIsTaken = await User.findOne({ where: { username } });
   if (usernameIsTaken) {
     throw new Error("El nombre de usuario ingresado ya existe!");
   }
+};
 
+export const validateNewUser = async (username: string, password: string) => {
+  await validateUniqueUsername(username);
   validatePassword(password);
 };
 

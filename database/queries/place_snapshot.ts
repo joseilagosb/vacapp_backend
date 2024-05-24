@@ -1,12 +1,18 @@
-import db from "../models";
+import { FindAttributeOptions } from "sequelize";
+import CurrentCrowd from "../models/CurrentCrowd";
+import CurrentQueue from "../models/CurrentQueue";
+import Place from "../models/Place";
+
 import { getPlaceSnapshotAttributes } from "./attributes/place_snapshot";
 
-const { Place, CurrentCrowd, CurrentQueue } = db;
-
 // Retorna un recuento de las estadísticas de un determinado lugar en el día y hora actuales
-export const getPlaceSnapshot = async (placeId, day, hour) => {
-  return await Place.findOne({
-    attributes: [...getPlaceSnapshotAttributes()],
+export const getPlaceSnapshot = async (
+  placeId: number,
+  day: number,
+  hour: number
+): Promise<Place> => {
+  return Place.findOne({
+    attributes: getPlaceSnapshotAttributes(),
     include: [
       {
         model: CurrentCrowd,

@@ -1,11 +1,11 @@
-import db from "../models";
+import CurrentCrowd from "../models/CurrentCrowd";
+import CurrentQueue from "../models/CurrentQueue";
+import Place from "../models/Place";
 import { getPlaceSnapshotAttributes } from "./attributes/place_snapshot";
 
-const { Place, CurrentCrowd, CurrentQueue } = db;
-
-export const getAllPlaceSnapshots = async (day, hour) => {
-  return await Place.findAll({
-    attributes: [...getPlaceSnapshotAttributes()],
+export const getAllPlaceSnapshots = async (day: number, hour: number): Promise<Array<Place>> => {
+  return Place.findAll({
+    attributes: [...(getPlaceSnapshotAttributes() as [])],
     include: [
       {
         model: CurrentCrowd,

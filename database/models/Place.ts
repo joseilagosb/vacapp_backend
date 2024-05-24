@@ -1,6 +1,8 @@
-import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 
 import PlaceType from "./PlaceType";
+import CurrentCrowd from "./CurrentCrowd";
+import CurrentQueue from "./CurrentQueue";
 
 @Table({
   modelName: "Place",
@@ -26,6 +28,12 @@ class Place extends Model {
 
   @Column
   attention_surface: number;
+
+  @HasMany(() => CurrentCrowd)
+  current_crowds: Array<CurrentCrowd>;
+
+  @HasMany(() => CurrentQueue)
+  current_queues: Array<CurrentQueue>;
 }
 
 export default Place;

@@ -1,4 +1,4 @@
-import jsonwebtoken from "jsonwebtoken";
+import jsonwebtoken, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import User from "../database/models/User";
@@ -53,16 +53,14 @@ export const loginUser = async (
   }
 };
 
-export const getCurrentUser = (req) => {
+export const getCurrentUser = (req): JwtPayload | undefined => {
   const token = (req.get("Authorization") || "").replace("Bearer ", "");
   try {
     if (token) {
-      const user = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+      const user = jsonwebtoken.verify(token, process.env.JWT_SECRET) as JwtPayload;
       return user;
     }
   } catch (error) {
-    throw new Error(
-      "Ha ocurrido un error al verificar el token de autorización. Comprueba que fue insertado correctamente en la solicitud, o que no haya expirado."
-    );
+    return undefined;
   }
 };

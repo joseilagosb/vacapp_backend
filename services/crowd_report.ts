@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
 
-import { getAllPlaceCurrentCrowds } from "../database/queries/all_place_current_crowds";
-
 import { getDayType } from "../utils/time";
 
 import {
@@ -15,6 +13,7 @@ import {
 } from "../ts/types/services/crowd_report.types";
 
 import { DayType } from "../ts/enums/utils.enums";
+import CurrentCrowd from "../database/models/CurrentCrowd";
 
 const getDividedCrowdsMap = (crowdsMap: CrowdsMap): DividedCrowdsMap => {
   const result = {
@@ -242,7 +241,7 @@ const getLeastCrowdedDaySameTime = (crowdsMap, hour: number): number | undefined
 };
 
 export const getCrowdReport = async (placeId: number): Promise<CrowdReport> => {
-  const crowdsList = await getAllPlaceCurrentCrowds(placeId);
+  const crowdsList = await CurrentCrowd.findAll({ where: { place_id: placeId }, raw: true });
   const crowdsMap: CrowdsMap = crowdsList.reduce((acc, crowd) => {
     acc[crowd["crowd_day_of_week"]] = acc[crowd["crowd_day_of_week"]] || {};
     acc[crowd["crowd_day_of_week"]][crowd["crowd_hour"]] = crowd["people_no"];

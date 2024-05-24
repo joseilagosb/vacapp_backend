@@ -1,6 +1,6 @@
-const SqlString = require("sequelize/lib/sql-string");
+import SqlString from "sequelize/lib/sql-string";
 
-export const getIndicatorAverageScore = (indicators) => {
+export const getIndicatorAverageScore = (indicators: Array<number>): string => {
   let indicatorsString = SqlString.escape(indicators.join(","));
   indicatorsString = indicatorsString.substring(1, indicatorsString.length - 1);
   return `SELECT

@@ -1,7 +1,7 @@
-import sequelize from "sequelize";
+import sequelize, { FindAttributeOptions } from "sequelize";
 import { getIndicatorAverageScore } from "../raw/indicator_average_score";
 
-export const getPlaceSnapshotAttributes = () => {
+export const getPlaceSnapshotAttributes = (): FindAttributeOptions => {
   const covidSafetyScore = getIndicatorAverageScore([1, 2, 3]);
   const serviceQualityScore = getIndicatorAverageScore([4, 6]);
   return [
