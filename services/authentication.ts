@@ -1,5 +1,5 @@
 import jsonwebtoken, { JwtPayload } from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import User from "../database/models/User";
 

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import User from "../database/models/User";
 
@@ -42,12 +42,12 @@ const validateUniqueUsername = async (username: string) => {
   }
 };
 
-export const validateNewUser = async (username: string, password: string) => {
+export const validateNewUser = async (username: string, password: string): Promise<void> => {
   await validateUniqueUsername(username);
   validatePassword(password);
 };
 
-export const validateExistingUser = async (username: string, password: string) => {
+export const validateExistingUser = async (username: string, password: string): Promise<User> => {
   const user = await User.findOne({ where: { username } });
   if (!user) {
     throw new Error("El nombre de usuario o contraseña no son válidos.");

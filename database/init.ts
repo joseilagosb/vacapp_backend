@@ -1,13 +1,14 @@
 import path from "path";
 import { Sequelize } from "sequelize-typescript";
 
-import credentials from "./config";
+// Ver config.ts. El archivo de configuración tiene que importarse en formato CommonJS
+const config = require("./config");
 
 import dotenv from "dotenv";
 dotenv.config();
 
 let sequelize = new Sequelize({
-  ...credentials,
+  ...config[process.env.NODE_ENV],
   models: [path.join(__dirname, "models")],
 });
 

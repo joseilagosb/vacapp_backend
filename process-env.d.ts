@@ -8,6 +8,7 @@ declare global {
       POSTGRES_PASSWORD: string;
       POSTGRES_DB: string;
       POSTGRES_HOST: string;
+      POSTGRES_PORT: string;
       NODE_ENV: "development" | "production";
       JWT_SECRET: string;
     }
