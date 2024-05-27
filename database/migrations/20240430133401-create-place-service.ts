@@ -1,8 +1,8 @@
-"use strict";
+import { Migration } from "../../ts/types/database.types";
 
-module.exports = {
+const migration: Migration = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("place_coordinate", {
+    await queryInterface.createTable("place_service", {
       place_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -11,18 +11,20 @@ module.exports = {
           key: "id",
         },
       },
-      coordinate_id: {
+      service_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "coordinates",
+          model: "services",
           key: "id",
         },
       },
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("place_coordinate");
+  down: async (queryInterface, _) => {
+    await queryInterface.dropTable("place_service");
   },
 };
+
+export default migration;

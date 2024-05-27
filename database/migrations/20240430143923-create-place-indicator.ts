@@ -1,6 +1,6 @@
-"use strict";
+import { Migration } from "../../ts/types/database.types";
 
-module.exports = {
+const migration: Migration = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("place_indicator", {
       place_id: {
@@ -32,7 +32,9 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, _) => {
     await queryInterface.dropTable("place_indicator");
   },
 };
+
+export default migration;

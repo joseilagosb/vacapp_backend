@@ -1,8 +1,8 @@
-"use strict";
+import { Migration } from "../../ts/types/database.types";
 
-module.exports = {
+const migration: Migration = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("current_crowds", {
+    await queryInterface.createTable("current_queues", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -17,11 +17,11 @@ module.exports = {
           key: "id",
         },
       },
-      crowd_day_of_week: {
+      queue_day_of_week: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      crowd_hour: {
+      queue_hour: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
@@ -32,7 +32,9 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("current_crowds");
+  down: async (queryInterface, _) => {
+    await queryInterface.dropTable("current_queues");
   },
 };
+
+export default migration;

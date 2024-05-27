@@ -1,7 +1,7 @@
-"use strict";
+import { Seed } from "../../ts/types/database.types";
 
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+const seed: Seed = {
+  up: async (queryInterface, _) => {
     await queryInterface.bulkInsert(
       "indicators",
       [
@@ -52,7 +52,9 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, _) => {
     await queryInterface.bulkDelete("indicators", null, {});
   },
 };
+
+export default seed;

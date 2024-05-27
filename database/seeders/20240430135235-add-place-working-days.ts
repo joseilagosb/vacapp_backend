@@ -1,7 +1,7 @@
-"use strict";
+import { Seed } from "../../ts/types/database.types";
 
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+const seed: Seed = {
+  up: async (queryInterface, _) => {
     await queryInterface.bulkInsert(
       "place_working_days",
       [
@@ -2002,7 +2002,9 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, _) => {
     await queryInterface.bulkDelete("place_working_days", null, {});
   },
 };
+
+export default seed;
