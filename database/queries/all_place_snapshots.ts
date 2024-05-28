@@ -1,10 +1,16 @@
 import CurrentCrowd from "../models/CurrentCrowd";
 import CurrentQueue from "../models/CurrentQueue";
 import Place from "../models/Place";
+
 import { getPlaceSnapshotAttributes } from "./attributes/place_snapshot";
 
-export const getAllPlaceSnapshots = async (day: number, hour: number): Promise<Array<Place>> => {
-  return Place.findAll({
+import { PlaceSnapshot } from "../../ts/types/services/place_snapshot.types";
+
+export const getAllPlaceSnapshots = async (
+  day: number,
+  hour: number
+): Promise<Array<PlaceSnapshot>> => {
+  const places = (await Place.findAll({
     attributes: [...(getPlaceSnapshotAttributes() as [])],
     include: [
       {
@@ -19,5 +25,6 @@ export const getAllPlaceSnapshots = async (day: number, hour: number): Promise<A
       },
     ],
     raw: true,
-  });
+  })) as Array<unknown>;
+  return places.map((place) => ({ ...(place as PlaceSnapshot) }));
 };

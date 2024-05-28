@@ -4,13 +4,14 @@ import PlaceType from "../../database/models/PlaceType";
 import Place from "../../database/models/Place";
 import Coordinate from "../../database/models/Coordinate";
 import Service from "../../database/models/Service";
-import Indicator from "../../database/models/Indicator";
-import PlaceIndicator from "../../database/models/PlaceIndicator";
 import PlaceWorkingDay from "../../database/models/PlaceWorkingDay";
 import CurrentCrowd from "../../database/models/CurrentCrowd";
 import CurrentQueue from "../../database/models/CurrentQueue";
 
 import { allMatchesByKeys } from "../../database/queries/all_matches_by_keys";
+import Indicator from "../../database/models/Indicator";
+import { Op } from "sequelize";
+import PlaceIndicator from "../../database/models/PlaceIndicator";
 
 export default {
   place: {
@@ -31,18 +32,20 @@ export default {
       );
     }),
     indicators: new DataLoader(async (keys) => {
-      const indicators = await allMatchesByKeys(Indicator, keys, Place);
-      return keys.map((key) =>
-        indicators.map((indicator) => {
-          const place = indicator.places.find((place) => place.id === key) as any;
-          const placeIndicator = place.placeIndicator as PlaceIndicator;
-          return {
-            ...indicator.dataValues,
-            indicator_value: placeIndicator.indicator_value,
-            opinion_no: placeIndicator.opinion_no,
-          };
-        })
-      );
+      const places = await Place.findAll({
+        include: { model: Indicator },
+        where: { id: { [Op.in]: keys } },
+      });
+      const loaders = keys.map((key) => {
+        const place = places.find((place) => place.id === key);
+        const placeIndicators = place.indicators.map((indicator) => ({
+          ...indicator.dataValues,
+          indicator_value: (indicator as any).PlaceIndicator.indicator_value,
+          opinion_no: (indicator as any).PlaceIndicator.opinion_no,
+        }));
+        return placeIndicators;
+      });
+      return loaders;
     }),
     placeWorkingDays: new DataLoader(async (keys) => {
       const placeWorkingDays = await PlaceWorkingDay.findAll();

@@ -1,6 +1,7 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 
 import Place from "../../database/models/Place";
+import { Resolvers } from "../../ts/types/graphql/resolvers.types";
 
 const typeDefs: TypeDefs = [
   gql`
@@ -26,7 +27,7 @@ const typeDefs: TypeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     allPlaces: async () => Place.findAll(),
     placeById: async (_, args, __, ___) => Place.findByPk(args.id),
@@ -37,11 +38,11 @@ const resolvers = {
     coordinates: async (obj, _, { loaders }, __) => await loaders.place.coordinates.load(obj.id),
     services: async (obj, _, { loaders }, __) => await loaders.place.services.load(obj.id),
     indicators: async (obj, _, { loaders }, __) => await loaders.place.indicators.load(obj.id),
-    place_working_days: async (obj, args, { loaders }, info) =>
+    place_working_days: async (obj, _, { loaders }, __) =>
       await loaders.place.placeWorkingDays.load(obj.id),
-    current_crowds: async (obj, args, { loaders }, info) =>
+    current_crowds: async (obj, _, { loaders }, __) =>
       await loaders.place.currentCrowds.load(obj.id),
-    current_queues: async (obj, args, { loaders }, info) =>
+    current_queues: async (obj, _, { loaders }, __) =>
       await loaders.place.currentQueues.load(obj.id),
   },
 };

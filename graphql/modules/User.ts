@@ -1,15 +1,16 @@
 import { TypeDefs, createModule, gql } from "graphql-modules";
 import { signUpUser, loginUser } from "../../services/authentication";
+import { Resolvers } from "../../ts/types/graphql/resolvers.types";
 
 const typeDefs: TypeDefs = [
   gql`
     type Query
 
     type Mutation {
-      login(username: String!, password: String!): AuthPayload
-      signUp(username: String!, password: String!): AuthPayload
+      login(username: String!, password: String!): AuthenticationPayload
+      signUp(username: String!, password: String!): AuthenticationPayload
     }
-    type AuthPayload {
+    type AuthenticationPayload {
       token: String!
       user: User!
       message: String
@@ -21,7 +22,7 @@ const typeDefs: TypeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Mutation: {
     login: async (_, args, __, ___) => loginUser(args.username, args.password),
     signUp: async (_, args, __, ___) => signUpUser(args.username, args.password),

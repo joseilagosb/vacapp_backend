@@ -1,17 +1,18 @@
-import { FindAttributeOptions } from "sequelize";
 import CurrentCrowd from "../models/CurrentCrowd";
 import CurrentQueue from "../models/CurrentQueue";
 import Place from "../models/Place";
 
 import { getPlaceSnapshotAttributes } from "./attributes/place_snapshot";
 
+import { PlaceSnapshot } from "../../ts/types/services/place_snapshot.types";
+
 // Retorna un recuento de las estadísticas de un determinado lugar en el día y hora actuales
 export const getPlaceSnapshot = async (
   placeId: number,
   day: number,
   hour: number
-): Promise<Place> => {
-  return Place.findOne({
+): Promise<PlaceSnapshot> => {
+  const place = (await Place.findOne({
     attributes: getPlaceSnapshotAttributes(),
     include: [
       {
@@ -27,5 +28,11 @@ export const getPlaceSnapshot = async (
     ],
     where: { id: placeId },
     raw: true,
-  });
+  })) as unknown;
+  if (!place) {
+    throw new Error("No se encontró ningún lugar que esté asociado al identificador indicado.");
+  }
+  return {
+    ...(place as PlaceSnapshot),
+  };
 };

@@ -1,8 +1,10 @@
-import { Column, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 
 import PlaceType from "./PlaceType";
 import CurrentCrowd from "./CurrentCrowd";
 import CurrentQueue from "./CurrentQueue";
+import PlaceIndicator from "./PlaceIndicator";
+import Indicator from "./Indicator";
 
 @Table({
   modelName: "Place",
@@ -28,6 +30,9 @@ class Place extends Model {
 
   @Column
   attention_surface: number;
+
+  @BelongsToMany(() => Indicator, () => PlaceIndicator)
+  indicators: Array<Indicator>;
 
   @HasMany(() => CurrentCrowd)
   current_crowds: Array<CurrentCrowd>;

@@ -1,5 +1,8 @@
-import { Resolvers, TypeDefs, createModule, gql } from "graphql-modules";
+import { TypeDefs, createModule, gql } from "graphql-modules";
+
 import Indicator from "../../database/models/Indicator";
+
+import { Resolvers } from "../../ts/types/graphql/resolvers.types";
 
 const typeDefs: TypeDefs = [
   gql`

@@ -1,7 +1,8 @@
 import express, { Express } from "express";
-import { initApolloServer } from "./graphql/init";
 
 import "./database/init";
+
+import { initApolloServer } from "./graphql/init";
 
 const app: Express = express();
 

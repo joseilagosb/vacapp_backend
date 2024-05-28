@@ -1,6 +1,9 @@
 import { createModule, gql } from "graphql-modules";
+
 import { getPlaceSnapshot } from "../../database/queries/place_snapshot";
 import { getAllPlaceSnapshots } from "../../database/queries/all_place_snapshots";
+
+import { Resolvers } from "../../ts/types/graphql/resolvers.types";
 
 const typeDefs = [
   gql`
@@ -20,10 +23,10 @@ const typeDefs = [
   `,
 ];
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    placeSnapshot: async (obj, args, context, info) => getPlaceSnapshot(args.place_id, args.day, args.hour),
-    allPlaceSnapshots: async (obj, args, context, info) => getAllPlaceSnapshots(args.day, args.hour),
+    placeSnapshot: async (_, args, __, ___) => getPlaceSnapshot(args.place_id, args.day, args.hour),
+    allPlaceSnapshots: async (_, args, __, ___) => getAllPlaceSnapshots(args.day, args.hour),
   },
 };
 

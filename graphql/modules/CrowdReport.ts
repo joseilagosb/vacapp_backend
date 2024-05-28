@@ -48,7 +48,7 @@ const typeDefs: TypeDefs = [
 
 const resolvers: Resolvers = {
   Query: {
-    crowdReport: async (obj, args, context, info) => getCrowdReport(args.placeId),
+    crowdReport: async (_, args, __, ___) => getCrowdReport(args.placeId),
   },
 };
 
