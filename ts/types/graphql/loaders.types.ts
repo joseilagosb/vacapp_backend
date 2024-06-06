@@ -8,7 +8,7 @@ import PlaceWorkingDay from "../../../database/models/PlaceWorkingDay";
 import CurrentCrowd from "../../../database/models/CurrentCrowd";
 import CurrentQueue from "../../../database/models/CurrentQueue";
 
-type PlaceTypesLoader = DataLoader<unknown, Array<PlaceType>, unknown>;
+type PlaceTypeLoader = DataLoader<unknown, PlaceType, unknown>;
 type CoordinatesLoader = DataLoader<unknown, Array<Coordinate>, unknown>;
 type ServicesLoader = DataLoader<unknown, Array<Service>, unknown>;
 type IndicatorsLoader = DataLoader<unknown, Array<Indicator>, unknown>;
@@ -18,7 +18,7 @@ type CurrentQueuesLoader = DataLoader<unknown, Array<CurrentQueue>, unknown>;
 
 export type DataLoaders = {
   place: {
-    placeTypes: PlaceTypesLoader;
+    placeType: PlaceTypeLoader;
     coordinates: CoordinatesLoader;
     services: ServicesLoader;
     indicators: IndicatorsLoader;

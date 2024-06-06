@@ -2,6 +2,7 @@ import { TypeDefs, createModule, gql } from "graphql-modules";
 
 import Place from "../../database/models/Place";
 import { Resolvers } from "../../ts/types/graphql/resolvers.types";
+import PlaceType from "../../database/models/PlaceType";
 
 const typeDefs: TypeDefs = [
   gql`
@@ -33,8 +34,7 @@ const resolvers: Resolvers = {
     placeById: async (_, args, __, ___) => Place.findByPk(args.id),
   },
   Place: {
-    place_type: async (obj, _, { loaders }, __) =>
-      (await loaders.place.placeTypes.load(obj.place_type))[0],
+    place_type: async (obj, _, { loaders }, __) => await loaders.place.placeType.load(obj.id),
     coordinates: async (obj, _, { loaders }, __) => await loaders.place.coordinates.load(obj.id),
     services: async (obj, _, { loaders }, __) => await loaders.place.services.load(obj.id),
     indicators: async (obj, _, { loaders }, __) => await loaders.place.indicators.load(obj.id),

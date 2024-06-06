@@ -1,4 +1,5 @@
-import { Column, Model, Table } from "sequelize-typescript";
+import { Column, HasMany, Model, Table } from "sequelize-typescript";
+import Place from "./Place";
 
 @Table({
   modelName: "PlaceType",
@@ -8,6 +9,9 @@ import { Column, Model, Table } from "sequelize-typescript";
 class PlaceType extends Model {
   @Column
   place_type_name: string;
+
+  @HasMany(() => Place)
+  places: Place;
 }
 
 export default PlaceType;

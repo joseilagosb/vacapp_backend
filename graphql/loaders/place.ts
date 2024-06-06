@@ -1,4 +1,5 @@
 import DataLoader from "dataloader";
+import { Op } from "sequelize";
 
 import PlaceType from "../../database/models/PlaceType";
 import Place from "../../database/models/Place";
@@ -7,17 +8,14 @@ import Service from "../../database/models/Service";
 import PlaceWorkingDay from "../../database/models/PlaceWorkingDay";
 import CurrentCrowd from "../../database/models/CurrentCrowd";
 import CurrentQueue from "../../database/models/CurrentQueue";
-
-import { allMatchesByKeys } from "../../database/queries/all_matches_by_keys";
 import Indicator from "../../database/models/Indicator";
-import { Op } from "sequelize";
-import PlaceIndicator from "../../database/models/PlaceIndicator";
+import { allMatchesByKeys } from "../../database/queries/all_matches_by_keys";
 
 export default {
   place: {
-    placeTypes: new DataLoader(async (keys) => {
-      const placeTypes = await PlaceType.findAll();
-      return keys.map((key) => placeTypes.filter((placeType) => placeType.id === key));
+    placeType: new DataLoader(async (keys) => {
+      const placeTypes = await allMatchesByKeys(PlaceType, keys, Place, { raw: true });
+      return keys.map((key) => placeTypes.find((placeType) => placeType["places.id"] === key));
     }),
     coordinates: new DataLoader(async (keys) => {
       const coordinates = await allMatchesByKeys(Coordinate, keys, Place);
